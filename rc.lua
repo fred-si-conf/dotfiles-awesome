@@ -56,18 +56,18 @@ modkey = "Mod4"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts =
 {
---    awful.layout.suit.floating,
---    awful.layout.suit.tile,
-    awful.layout.suit.magnifier,
-    awful.layout.suit.max,
-    awful.layout.suit.tile.left,
     awful.layout.suit.spiral.dwindle,
+    awful.layout.suit.magnifier,
+    awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
---    awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal,
---    awful.layout.suit.spiral,
+    awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
+    awful.layout.suit.floating,
+--    awful.layout.suit.tile.top,
+--    awful.layout.suit.fair,
+--    awful.layout.suit.tile,
+--    awful.layout.suit.spiral,
 }
 -- }}}
 
@@ -90,13 +90,6 @@ end
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
---myawesomemenu = {
---   { "manual", terminal .. " -e man awesome" },
---   { "edit config", editor_cmd .. " " .. awesome.conffile },
---   { "restart", awesome.restart },
---   { "quit", awesome.quit }
---}
-
 mymainmenu = awful.menu({ items = { { "manual", terminal .. " -e man awesome" },
                                     { "edit config", editor_cmd .. " " .. awesome.conffile },
                                     { "open terminal", terminal },
@@ -220,6 +213,8 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
+    awful.key({ modkey, "Control" }, "t",   awful.tag.viewprev       ),
+    awful.key({ modkey, "Control" }, "s",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     awful.key({ modkey,           }, "s",
@@ -237,8 +232,6 @@ globalkeys = awful.util.table.join(
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "s", function () awful.client.swap.byidx(  1)    end),
     awful.key({ modkey, "Shift"   }, "t", function () awful.client.swap.byidx( -1)    end),
-    awful.key({ modkey, "Control" }, "s", function () awful.screen.focus_relative( 1) end),
-    awful.key({ modkey, "Control" }, "t", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "Tab",
         function ()
@@ -250,6 +243,7 @@ globalkeys = awful.util.table.join(
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey,           }, "a", function () awful.util.spawn(terminal .. " -e man awesome") end),
     awful.key({ modkey, "Control" }, "h", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -297,6 +291,7 @@ clientkeys = awful.util.table.join(
             c.maximized_vertical   = not c.maximized_vertical
         end)
 )
+
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
