@@ -106,7 +106,8 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = awful.widget.textclock()
+os.setlocale("fr_FR.UTF-8")
+mytextclock = awful.widget.textclock(" %a %d %b  %H:%M:%S ", 1)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -468,12 +469,13 @@ root.keys(globalkeys)
 --
 -- }}}
 
--- Applications launcher {{{
+-- Applications launchers keybinding {{{
 appLauncherKey = awful.util.table.join( 
 	awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn("firefox") end),
 	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("thunderbird") end),
 
-	awful.key({ modkey,"Mod1"}, "g", function () awful.util.spawn("gvim") end)
+	awful.key({ modkey,"Mod1"}, "g", function () awful.util.spawn("gvim") end),
+	awful.key({ modkey,"Mod1"}, "q", function () awful.util.spawn("qbittorent") end)
 )
 
 globalkeys = awful.util.table.join(
@@ -483,5 +485,7 @@ globalkeys = awful.util.table.join(
 
 root.keys(globalkeys)
 -- }}}
+
+awful.util.spawn("qbittorent")
 
 -- vim:foldmethod=marker
