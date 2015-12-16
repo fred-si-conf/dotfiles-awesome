@@ -474,8 +474,8 @@ appLauncherKey = awful.util.table.join(
 	awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn("firefox") end),
 	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("thunderbird") end),
 
-	awful.key({ modkey,"Mod1"}, "g", function () awful.util.spawn("gvim") end),
-	awful.key({ modkey,"Mod1"}, "q", function () awful.util.spawn("qbittorent") end)
+	awful.key({ modkey,"Mod1"}, "h", function () awful.util.spawn("thunar") end),
+	awful.key({ modkey,"Mod1"}, "g", function () awful.util.spawn("gvim") end)
 )
 
 globalkeys = awful.util.table.join(
@@ -486,6 +486,8 @@ globalkeys = awful.util.table.join(
 root.keys(globalkeys)
 -- }}}
 
-awful.util.spawn("qbittorent")
+-- Applications launched at startup {{{
+awful.util.spawn("qbittorrent")
+-- }}}
 
 -- vim:foldmethod=marker
