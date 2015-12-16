@@ -45,7 +45,7 @@ terminal = "urxvt"
 editor = "gvim"
 editor_cmd = terminal .. " -e " .. editor
 browser = "firefox"
-mail_client = "thundebird"
+mail_client = "thunderbird"
 file_manager = "thunar"
 torrent_client = "qbittorrent"
 
