@@ -468,4 +468,20 @@ root.keys(globalkeys)
 --
 -- }}}
 
+-- Applications launcher {{{
+appLauncherKey = awful.util.table.join( 
+	awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn("firefox") end),
+	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("thunderbird") end),
+
+	awful.key({ modkey,"Mod1"}, "g", function () awful.util.spawn("gvim") end)
+)
+
+globalkeys = awful.util.table.join(
+	globalkeys,
+	appLauncherKey
+)
+
+root.keys(globalkeys)
+-- }}}
+
 -- vim:foldmethod=marker
