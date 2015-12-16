@@ -44,6 +44,10 @@ beautiful.init("~/.config/awesome/themes/default/theme.lua")
 terminal = "urxvt"
 editor = "gvim"
 editor_cmd = terminal .. " -e " .. editor
+browser = "firefox"
+mail_client = "thundebird"
+file_manager = "thunar"
+torrent_client = "qbittorrent"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -471,11 +475,11 @@ root.keys(globalkeys)
 
 -- Applications launchers keybinding {{{
 appLauncherKey = awful.util.table.join( 
-	awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn("firefox") end),
-	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("thunderbird") end),
+	awful.key({ modkey,"Mod1"}, "b", function () awful.util.spawn(browser) end),
+	awful.key({ modkey,"Mod1"}, "m", function () awful.util.spawn(mail_client) end),
 
-	awful.key({ modkey,"Mod1"}, "h", function () awful.util.spawn("thunar") end),
-	awful.key({ modkey,"Mod1"}, "g", function () awful.util.spawn("gvim") end)
+	awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn(file_manager) end),
+	awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end)
 )
 
 globalkeys = awful.util.table.join(
@@ -487,7 +491,7 @@ root.keys(globalkeys)
 -- }}}
 
 -- Applications launched at startup {{{
-awful.util.spawn("qbittorrent")
+awful.util.spawn(torrent_client)
 -- }}}
 
 -- vim:foldmethod=marker
