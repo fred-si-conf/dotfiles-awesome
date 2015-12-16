@@ -1,4 +1,3 @@
--- vim:foldmethod=marker
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -243,9 +242,9 @@ globalkeys = awful.util.table.join(
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
-    awful.key({ modkey,           }, "a", function () awful.util.spawn(terminal .. " -e man awesome") end),
-    awful.key({ modkey, "Control" }, "h", awesome.restart),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+	awful.key({ modkey,           }, "a", function () awful.util.spawn(terminal .. " -e man awesome") end),
+	awful.key({ modkey, "Control" }, "h", awesome.restart),
+	awful.key({ modkey, "Control"   }, "q", awesome.quit),
 
     awful.key({ modkey,           }, "r",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "c",     function () awful.tag.incmwfact(-0.05)    end),
@@ -442,3 +441,31 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+-- {{{ Redshift
+local redshift = require("redshift")
+
+-- set binary path (optional)
+redshift.redshift = "/usr/bin/redshift"
+-- set additional redshift arguments (optional)
+redshift.options = "-c ~/.config/redshift.conf"
+-- 1 for dim, 0 for not dimmed
+redshift.init(0)
+
+redshiftkeys = awful.util.table.join(
+	awful.key({ modkey,           }, "d",      redshift.dim()),
+	awful.key({ modkey,           }, "l",      redshift.undim()),
+	awful.key({ modkey,           }, "j",      redshift.toggle())
+)
+
+globalkeys = awful.util.table.join(
+	globalkeys,
+	redshiftkeys
+)
+
+-- Set keys
+root.keys(globalkeys)
+--
+-- }}}
+
+-- vim:foldmethod=marker
