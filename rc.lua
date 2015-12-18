@@ -44,9 +44,12 @@ beautiful.init("~/.config/awesome/themes/default/theme.lua")
 terminal = "urxvt"
 editor = "gvim"
 editor_cmd = terminal .. " -e " .. editor
-browser = "firefox"
-mail_client = "thunderbird"
 file_manager = "thunar"
+
+mail_client = "thunderbird"
+irc_client = terminal .. " -e " .. "xchat" 
+
+browser = "firefox"
 torrent_client = "qbittorrent"
 
 -- Default modkey.
@@ -213,7 +216,7 @@ root.buttons(awful.util.table.join(
 ))
 -- }}}
 
--- {{{ Key bindings
+-- {{{ Key bindings 
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
@@ -475,11 +478,13 @@ root.keys(globalkeys)
 
 -- Applications launchers keybinding {{{
 appLauncherKey = awful.util.table.join( 
+	awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn(file_manager) end),
+	awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end),
+
 	awful.key({ modkey,"Mod1"}, "b", function () awful.util.spawn(browser) end),
 	awful.key({ modkey,"Mod1"}, "m", function () awful.util.spawn(mail_client) end),
+	awful.key({ modkey,"Mod1"}, "i", function () awful.util.spawn(irc_client) end)
 
-	awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn(file_manager) end),
-	awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end)
 )
 
 globalkeys = awful.util.table.join(
@@ -492,6 +497,7 @@ root.keys(globalkeys)
 
 -- Applications launched at startup {{{
 awful.util.spawn(torrent_client)
+awful.util.spawn(irc_client)
 -- }}}
 
 -- vim:foldmethod=marker
