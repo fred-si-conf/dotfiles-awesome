@@ -47,7 +47,7 @@ editor_cmd = terminal .. " -e " .. editor
 file_manager = "thunar"
 
 mail_client = "thunderbird"
-irc_client = terminal .. " -e " .. "xchat" 
+irc_client = terminal .. " -e " .. "weechat" 
 
 browser = "firefox"
 torrent_client = "qbittorrent"
