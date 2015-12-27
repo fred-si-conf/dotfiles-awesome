@@ -42,15 +42,18 @@ beautiful.init("~/.config/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
+open_in_term = terminal .. " -e "
 editor = "gvim"
-editor_cmd = terminal .. " -e " .. editor
+editor_cmd = open_in_term .. editor
 file_manager = "thunar"
 
 mail_client = "thunderbird"
-irc_client = terminal .. " -e " .. "weechat" 
+irc_client = open_in_term .. "weechat" 
 
 browser = "firefox"
 torrent_client = "qbittorrent"
+
+music_player = open_in_term .. "cmus"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -75,6 +78,7 @@ local layouts =
 --    awful.layout.suit.tile,
 --    awful.layout.suit.spiral,
 }
+
 -- }}}
 
 -- {{{ Wallpaper
@@ -476,15 +480,41 @@ root.keys(globalkeys)
 --
 -- }}}
 
+-- Sound managing {{{
+sound = {}
+sound.card = ",0"
+sound.control = " Master"
+sound.step = " 10%"
+sound.command = "amixer " .. " set" .. sound.control .. sound.card
+sound.toggle = sound.command .. " toggle"
+sound.down = sound.command .. sound.step .. "-"
+sound.up = sound.command .. sound.step .. "+"
+
+sound_keys = awful.util.table.join(
+	awful.key({} ,"XF86AudioMute", function () awful.util.spawn(sound.toggle) end),
+	awful.key({} ,"XF86AudioLowerVolume", function () awful.util.spawn(sound.down) end),
+	awful.key({} ,"XF86AudioRaiseVolume", function () awful.util.spawn_with_shell(sound.up) end)
+)
+
+globalkeys = awful.util.table.join(
+globalkeys,
+sound_keys
+)
+-- }}}
+
 -- Applications launchers keybinding {{{
 appLauncherKey = awful.util.table.join( 
+	-- Administration
 	awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn(file_manager) end),
 	awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end),
 
+	-- Internet and web
 	awful.key({ modkey,"Mod1"}, "b", function () awful.util.spawn(browser) end),
 	awful.key({ modkey,"Mod1"}, "m", function () awful.util.spawn(mail_client) end),
-	awful.key({ modkey,"Mod1"}, "i", function () awful.util.spawn(irc_client) end)
+	awful.key({ modkey,"Mod1"}, "i", function () awful.util.spawn(irc_client) end),
 
+	-- Multimedia
+	awful.key({ modkey,"Mod1"}, "s", function () awful.util.spawn(music_player) end)
 )
 
 globalkeys = awful.util.table.join(
