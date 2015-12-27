@@ -467,17 +467,14 @@ redshiftkeys = awful.util.table.join(
 )
 
 globalkeys = awful.util.table.join(
-globalkeys,
+	globalkeys,
 	redshiftkeys
 )
 
--- Set keys
-root.keys(globalkeys)
---
 -- }}}
 
 -- Sound managing {{{
-sound = {}
+local sound = {}
 sound.card = ",0"
 sound.control = " Master"
 sound.step = " 10%"
@@ -497,7 +494,7 @@ globalkeys = awful.util.table.join(
 	sound_keys
 )
 
-music_player_controls = {}
+local music_player_controls = {}
 music_player_controls.play = "cmus-remote -u"
 music_player_controls.stop = "cmus-remote -s"
 music_player_controls.previous_track = "cmus-remote -r"
