@@ -457,21 +457,17 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- {{{ Redshift
 local redshift = require("redshift")
 
--- set binary path (optional)
-redshift.redshift = "/usr/bin/redshift"
--- set additional redshift arguments (optional)
-redshift.options = "-c ~/.config/redshift.conf"
 -- 1 for dim, 0 for not dimmed
 redshift.init(0)
 
 redshiftkeys = awful.util.table.join(
-	awful.key({ modkey,           }, "d",      redshift.dim()),
-	awful.key({ modkey,           }, "l",      redshift.undim()),
-	awful.key({ modkey,           }, "j",      redshift.toggle())
+	awful.key({ modkey, }, "d",      redshift.dim()),
+	awful.key({ modkey, }, "l",      redshift.undim()),
+	awful.key({ modkey, }, "j",      redshift.toggle())
 )
 
 globalkeys = awful.util.table.join(
-	globalkeys,
+globalkeys,
 	redshiftkeys
 )
 
@@ -497,9 +493,29 @@ sound_keys = awful.util.table.join(
 )
 
 globalkeys = awful.util.table.join(
-globalkeys,
-sound_keys
+	globalkeys,
+	sound_keys
 )
+
+music_player_controls = {}
+music_player_controls.play = "cmus-remote -u"
+music_player_controls.stop = "cmus-remote -s"
+music_player_controls.previous_track = "cmus-remote -r"
+music_player_controls.next_track = "cmus-remote -n"
+
+
+music_player_controls_keys = awful.util.table.join(
+	awful.key({} ,"XF86AudioPlay", function () awful.util.spawn(music_player_controls.play) end),
+	awful.key({} ,"XF86AudioStop", function () awful.util.spawn(music_player_controls.stop) end),
+	awful.key({} ,"XF86AudioPrev", function () awful.util.spawn_with_shell(music_player_controls.previous_track) end),
+	awful.key({} ,"XF86AudioNext", function () awful.util.spawn_with_shell(music_player_controls.next_track) end)
+)
+
+globalkeys = awful.util.table.join(
+	globalkeys,
+	music_player_controls_keys
+)
+
 -- }}}
 
 -- Applications launchers keybinding {{{
