@@ -63,8 +63,7 @@ music_player = open_in_term .. "cmus"
 modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-local layouts =
-{
+local layouts = {
     awful.layout.suit.spiral.dwindle,
     awful.layout.suit.magnifier,
     awful.layout.suit.tile.left,
@@ -458,7 +457,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 local redshift = require("redshift")
 
 -- 1 for dim, 0 for not dimmed
-redshift.init(0)
+--redshift.init(0)
 
 redshiftkeys = awful.util.table.join(
 	awful.key({ modkey, }, "d",      redshift.dim()),
@@ -483,6 +482,7 @@ sound.toggle = sound.command .. " toggle"
 sound.down = sound.command .. sound.step .. "-"
 sound.up = sound.command .. sound.step .. "+"
 
+
 sound_keys = awful.util.table.join(
 	awful.key({} ,"XF86AudioMute", function () awful.util.spawn(sound.toggle) end),
 	awful.key({} ,"XF86AudioLowerVolume", function () awful.util.spawn(sound.down) end),
@@ -494,12 +494,12 @@ globalkeys = awful.util.table.join(
 	sound_keys
 )
 
-local music_player_controls = {}
-music_player_controls.play = "cmus-remote -u"
-music_player_controls.stop = "cmus-remote -s"
-music_player_controls.previous_track = "cmus-remote -r"
-music_player_controls.next_track = "cmus-remote -n"
-
+local music_player_controls = {
+	play = "cmus-remote -u",
+	stop = "cmus-remote -s",
+	previous_track = "cmus-remote -r",
+	next_track = "cmus-remote -n"
+}
 
 music_player_controls_keys = awful.util.table.join(
 	awful.key({} ,"XF86AudioPlay", function () awful.util.spawn(music_player_controls.play) end),
