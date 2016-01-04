@@ -43,17 +43,18 @@ beautiful.init("~/.config/awesome/themes/default/theme.lua")
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
 open_in_term = terminal .. " -e "
+open_in_multiplexer = open_in_term .. "screen "
 editor = "gvim"
 editor_cmd = open_in_term .. editor
 file_manager = "thunar"
 
 mail_client = "thunderbird"
-irc_client = open_in_term .. "weechat" 
+irc_client = open_in_multiplexer .. "weechat" 
 
 browser = "firefox"
 torrent_client = "qbittorrent"
 
-music_player = open_in_term .. "cmus"
+music_player = open_in_multiplexer .. "cmus"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -66,15 +67,15 @@ modkey = "Mod4"
 local layouts = {
     awful.layout.suit.spiral.dwindle,
     awful.layout.suit.magnifier,
-    awful.layout.suit.tile.left,
+    awful.layout.suit.tile,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.fair.horizontal,
     awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
     awful.layout.suit.floating,
+ --   awful.layout.suit.tile.left,
 --    awful.layout.suit.tile.top,
 --    awful.layout.suit.fair,
---    awful.layout.suit.tile,
 --    awful.layout.suit.spiral,
 }
 
@@ -451,25 +452,6 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
--- }}}
-
--- {{{ Redshift
-local redshift = require("redshift")
-
--- 1 for dim, 0 for not dimmed
---redshift.init(0)
-
-redshiftkeys = awful.util.table.join(
-	awful.key({ modkey, }, "d",      redshift.dim()),
-	awful.key({ modkey, }, "l",      redshift.undim()),
-	awful.key({ modkey, }, "j",      redshift.toggle())
-)
-
-globalkeys = awful.util.table.join(
-	globalkeys,
-	redshiftkeys
-)
-
 -- }}}
 
 -- Sound managing {{{
