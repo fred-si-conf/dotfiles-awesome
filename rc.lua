@@ -49,12 +49,12 @@ editor_cmd = open_in_term .. editor
 file_manager = "thunar"
 
 mail_client = "thunderbird"
-irc_client = open_in_multiplexer .. "weechat" 
+irc_client = open_in_multiplexer .. "-S weechat weechat" 
 
 browser = "firefox"
 torrent_client = "qbittorrent"
 
-music_player = open_in_multiplexer .. "cmus"
+music_player = open_in_multiplexer .. "-S cmus cmus"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
