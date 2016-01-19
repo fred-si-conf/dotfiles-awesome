@@ -511,7 +511,11 @@ appLauncherKey = awful.util.table.join(
 	awful.key({ modkey,"Mod1"}, "i", function () awful.util.spawn(irc_client) end),
 
 	-- Multimedia
-	awful.key({ modkey,"Mod1"}, "s", function () awful.util.spawn(music_player) end)
+	awful.key({ modkey,"Mod1"}, "s", function () awful.util.spawn(music_player) end),
+
+	-- Divers
+	awful.key({ modkey,"Mod1"}, "z", function () awful.util.spawn("zim") end)
+	
 )
 
 globalkeys = awful.util.table.join(
