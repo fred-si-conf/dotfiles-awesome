@@ -503,6 +503,8 @@ appLauncherKey = awful.util.table.join(
 	awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn(file_manager) end),
 	awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end),
 
+	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("truecrypt") end),
+
 	-- Internet and web
 	awful.key({ modkey,"Mod1"}, "b", function () awful.util.spawn(browser) end),
 	awful.key({ modkey,"Mod1"}, "m", function () awful.util.spawn(mail_client) end),
