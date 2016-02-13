@@ -507,11 +507,16 @@ appLauncherKey = awful.util.table.join(
 
 	-- Internet and web
 	awful.key({ modkey,"Mod1"}, "b", function () awful.util.spawn(browser) end),
+	awful.key({ modkey,"Mod1"}, "p", function () awful.util.spawn(browser .. " -p clean") end),
+
 	awful.key({ modkey,"Mod1"}, "m", function () awful.util.spawn(mail_client) end),
 	awful.key({ modkey,"Mod1"}, "i", function () awful.util.spawn(irc_client) end),
 
+	awful.key({ modkey,"Mod1"}, "h", function () awful.util.spawn("filezilla") end),
+
 	-- Multimedia
 	awful.key({ modkey,"Mod1"}, "s", function () awful.util.spawn(music_player) end),
+	awful.key({ modkey,"Mod1"}, "c", function () awful.util.spawn("calibre") end),
 
 	-- Divers
 	awful.key({ modkey,"Mod1"}, "z", function () awful.util.spawn("zim") end)
@@ -527,7 +532,7 @@ root.keys(globalkeys)
 -- }}}
 
 -- Applications launched at startup {{{
-awful.util.spawn(torrent_client)
+--awful.util.spawn(torrent_client)
 awful.util.spawn(irc_client)
 -- }}}
 
