@@ -3,10 +3,13 @@ local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
+
 -- Widget and layout library
 local wibox = require("wibox")
+
 -- Theme handling library
 local beautiful = require("beautiful")
+
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
@@ -43,21 +46,26 @@ hostname = io.open('/etc/hostname'):read()
 beautiful.init("~/.config/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt"
+io.popen('urxvtd -o -f -q')
+terminal = "urxvtc"
 open_in_term = terminal .. " -e "
 open_in_multiplexer = open_in_term .. "screen "
 editor = "gvim"
 editor_cmd = open_in_term .. editor
-file_manager = "thunar"
 
 mail_client = "thunderbird"
 irc_client = open_in_multiplexer .. "-S weechat weechat" 
 
 browser = "firefox"
-torrent_client = "qbittorrent"
 
-music_player = open_in_multiplexer .. "-S cmus cmus"
-suspend = 'systemctl suspend -i'
+if hostname == "burp" then
+	file_manager = "thunar"
+	music_player = open_in_multiplexer .. "-S cmus cmus"
+	torrent_client = "qbittorrent"
+elseif hostname == "lysa" then
+	file_manager = "pcmanfm"
+end
+
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -100,22 +108,6 @@ else
 	}
 
 end
-
-	 --layouts = {
-		--awful.layout.suit.max,
-		--awful.layout.suit.spiral.dwindle,
-		--awful.layout.suit.tile,
-		--awful.layout.suit.tile.bottom,
-		--awful.layout.suit.fair.horizontal,
-		--awful.layout.suit.max.fullscreen,
-		--awful.layout.suit.floating,
-		--awful.layout.suit.magnifier,
-	 --   awful.layout.suit.tile.left,
-	--    awful.layout.suit.tile.top,
-	--    awful.layout.suit.fair,
-	--    awful.layout.suit.spiral,
-	--}
-
 
 -- }}}
 
@@ -398,7 +390,7 @@ clientbuttons = awful.util.table.join(
 		sound.card = ",0"
 		sound.control = " Master"
 		sound.step = " 10%"
-		sound.command = "amixer " .. " set" .. sound.control .. sound.card
+		sound.command = "amixer set" .. sound.control .. sound.card
 		sound.toggle = sound.command .. " toggle"
 		sound.down = sound.command .. sound.step .. "-"
 		sound.up = sound.command .. sound.step .. "+"
@@ -495,8 +487,10 @@ awful.rules.rules = {
     { rule = { class = "gimp" },
       properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
+	{ rule = { class = "Firefox" },
+      properties = { tag = tags[1][7] } },
+	{ rule = { class = "Thunderbird" },
+      properties = { tag = tags[1][9] } },
 }
 -- }}}
 
@@ -580,7 +574,6 @@ appLauncherKey = awful.util.table.join(
 	awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end),
 
 	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("truecrypt") end),
-	awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end),
 
 	-- Internet and web
 	awful.key({ modkey,"Mod1"}, "b", function () awful.util.spawn(browser .. " -p default") end),
@@ -613,10 +606,7 @@ root.keys(globalkeys)
 if hostname == "burp" then
 	--awful.util.spawn(torrent_client)
 	awful.util.spawn(irc_client)
-
-elseif hostname == "lysa" then
-	awful.util.spawn(terminal)
-
+	awful.util.spawn(mail_client)
 end
 -- }}}
 
