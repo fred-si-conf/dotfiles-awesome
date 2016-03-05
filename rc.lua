@@ -3,10 +3,13 @@ local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
+
 -- Widget and layout library
 local wibox = require("wibox")
+
 -- Theme handling library
 local beautiful = require("beautiful")
+
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
@@ -37,25 +40,34 @@ end
 -- }}}
 
 -- {{{ Variable definitions
+hostname = io.open('/etc/hostname'):read()
+
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init("~/.config/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt"
+io.popen('urxvtd -o -f -q')
+terminal = "urxvtc"
 open_in_term = terminal .. " -e "
 open_in_multiplexer = open_in_term .. "screen "
+
 editor = "gvim"
 editor_cmd = open_in_term .. editor
-file_manager = "thunar"
 
+-- Internet
+browser = "firefox"
 mail_client = "thunderbird"
 irc_client = open_in_multiplexer .. "-S weechat weechat" 
 
-browser = "firefox"
-torrent_client = "qbittorrent"
+if hostname == "burp" then
+	suspend = 'systemctl suspend -i'
+	file_manager = "thunar"
+	music_player = open_in_multiplexer .. "-S cmus cmus"
+	torrent_client = "qbittorrent"
 
-music_player = open_in_multiplexer .. "-S cmus cmus"
-suspend = 'systemctl suspend -i'
+elseif hostname == "lysa" then
+	file_manager = "pcmanfm"
+end
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -65,20 +77,39 @@ suspend = 'systemctl suspend -i'
 modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-local layouts = {
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.max.fullscreen,
-    awful.layout.suit.floating,
-    awful.layout.suit.magnifier,
-    awful.layout.suit.max,
- --   awful.layout.suit.tile.left,
---    awful.layout.suit.tile.top,
---    awful.layout.suit.fair,
---    awful.layout.suit.spiral,
-}
+if hostname == "lysa" then
+	 layouts = {
+		awful.layout.suit.max,
+		awful.layout.suit.spiral.dwindle,
+		awful.layout.suit.tile,
+		awful.layout.suit.tile.bottom,
+		awful.layout.suit.fair.horizontal,
+		awful.layout.suit.max.fullscreen,
+		awful.layout.suit.floating,
+		awful.layout.suit.magnifier,
+	 --   awful.layout.suit.tile.left,
+	--    awful.layout.suit.tile.top,
+	--    awful.layout.suit.fair,
+	--    awful.layout.suit.spiral,
+	}
+
+else
+	layouts = {
+		awful.layout.suit.spiral.dwindle,
+		awful.layout.suit.tile,
+		awful.layout.suit.tile.bottom,
+		awful.layout.suit.fair.horizontal,
+		awful.layout.suit.max.fullscreen,
+		awful.layout.suit.floating,
+		awful.layout.suit.magnifier,
+		awful.layout.suit.max,
+	 --   awful.layout.suit.tile.left,
+	--    awful.layout.suit.tile.top,
+	--    awful.layout.suit.fair,
+	--    awful.layout.suit.spiral,
+	}
+
+end
 
 -- }}}
 
@@ -355,6 +386,87 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 
+	-- Sound keys {{{
+	if hostname == "burp" then -- {{{
+		local sound = {}
+		sound.card = ",0"
+		sound.control = " Master"
+		sound.step = " 10%"
+		sound.command = "amixer set" .. sound.control .. sound.card
+		sound.toggle = sound.command .. " toggle"
+		sound.down = sound.command .. sound.step .. "-"
+		sound.up = sound.command .. sound.step .. "+"
+
+
+		sound_keys = awful.util.table.join(
+			awful.key({} ,"XF86AudioMute", function () awful.util.spawn(sound.toggle) end),
+			awful.key({} ,"XF86AudioLowerVolume", function () awful.util.spawn(sound.down) end),
+			awful.key({} ,"XF86AudioRaiseVolume", function () awful.util.spawn_with_shell(sound.up) end)
+		)
+
+		globalkeys = awful.util.table.join(
+			globalkeys,
+			sound_keys
+		)
+
+		local music_player_controls = {
+			play = "cmus-remote -u",
+			stop = "cmus-remote -s",
+			previous_track = "cmus-remote -r",
+			next_track = "cmus-remote -n"
+		}
+
+		music_player_controls_keys = awful.util.table.join(
+			awful.key({} ,"XF86AudioPlay", function () awful.util.spawn(music_player_controls.play) end),
+			awful.key({} ,"XF86AudioStop", function () awful.util.spawn(music_player_controls.stop) end),
+			awful.key({} ,"XF86AudioPrev", function () awful.util.spawn_with_shell(music_player_controls.previous_track) end),
+			awful.key({} ,"XF86AudioNext", function () awful.util.spawn_with_shell(music_player_controls.next_track) end)
+		)
+
+		globalkeys = awful.util.table.join(
+			globalkeys,
+			music_player_controls_keys
+		)
+	-- }}}
+	--
+	elseif hostname == "lysa" then -- {{{
+		local function touchpad_on()
+			io.popen("synclient TouchpadOff=0")
+		end
+
+		local function touchpad_off()
+			io.popen("synclient TouchpadOff=1")
+			mouse.coords({x=0, y=0})
+		end
+
+		local function touchpad_toggle()
+			local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
+			local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
+
+			if touchpad_state == "0" then
+				touchpad_off()
+			else
+				touchpad_on()
+			end
+			
+		end
+					
+		sound_keys = awful.util.table.join(
+			awful.key({} ,"XF86AudioMute", function () touchpad_toggle() end),
+			awful.key({} ,"XF86AudioLowerVolume", function () io.popen("xbacklight -dec 10") end),
+			awful.key({} ,"XF86AudioRaiseVolume", function () io.popen("xbacklight -inc 10") end)
+		)
+
+		globalkeys = awful.util.table.join(
+			globalkeys,
+			sound_keys
+		)
+
+	end
+	-- }}}
+
+	-- }}}
+
 -- Set keys
 root.keys(globalkeys)
 -- }}}
@@ -377,8 +489,10 @@ awful.rules.rules = {
     { rule = { class = "gimp" },
       properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
+	{ rule = { class = "Firefox" },
+      properties = { tag = tags[1][7] } },
+	{ rule = { class = "Thunderbird" },
+      properties = { tag = tags[1][9] } },
 }
 -- }}}
 
@@ -455,49 +569,6 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
--- Sound managing {{{
-local sound = {}
-sound.card = ",0"
-sound.control = " Master"
-sound.step = " 10%"
-sound.command = "amixer " .. " set" .. sound.control .. sound.card
-sound.toggle = sound.command .. " toggle"
-sound.down = sound.command .. sound.step .. "-"
-sound.up = sound.command .. sound.step .. "+"
-
-
-sound_keys = awful.util.table.join(
-	awful.key({} ,"XF86AudioMute", function () awful.util.spawn(sound.toggle) end),
-	awful.key({} ,"XF86AudioLowerVolume", function () awful.util.spawn(sound.down) end),
-	awful.key({} ,"XF86AudioRaiseVolume", function () awful.util.spawn_with_shell(sound.up) end)
-)
-
-globalkeys = awful.util.table.join(
-	globalkeys,
-	sound_keys
-)
-
-local music_player_controls = {
-	play = "cmus-remote -u",
-	stop = "cmus-remote -s",
-	previous_track = "cmus-remote -r",
-	next_track = "cmus-remote -n"
-}
-
-music_player_controls_keys = awful.util.table.join(
-	awful.key({} ,"XF86AudioPlay", function () awful.util.spawn(music_player_controls.play) end),
-	awful.key({} ,"XF86AudioStop", function () awful.util.spawn(music_player_controls.stop) end),
-	awful.key({} ,"XF86AudioPrev", function () awful.util.spawn_with_shell(music_player_controls.previous_track) end),
-	awful.key({} ,"XF86AudioNext", function () awful.util.spawn_with_shell(music_player_controls.next_track) end)
-)
-
-globalkeys = awful.util.table.join(
-	globalkeys,
-	music_player_controls_keys
-)
-
--- }}}
-
 -- Applications launchers keybinding {{{
 appLauncherKey = awful.util.table.join( 
 	-- Administration
@@ -508,8 +579,9 @@ appLauncherKey = awful.util.table.join(
 	awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end),
 
 	-- Internet and web
-	awful.key({ modkey,"Mod1"}, "b", function () awful.util.spawn(browser) end),
+	awful.key({ modkey,"Mod1"}, "b", function () awful.util.spawn(browser .. " -p default") end),
 	awful.key({ modkey,"Mod1"}, "p", function () awful.util.spawn(browser .. " -p clean") end),
+	awful.key({ modkey,"Mod1"}, "o", function () awful.util.spawn(browser .. " -P") end),
 
 	awful.key({ modkey,"Mod1"}, "m", function () awful.util.spawn(mail_client) end),
 	awful.key({ modkey,"Mod1"}, "i", function () awful.util.spawn(irc_client) end),
@@ -534,8 +606,11 @@ root.keys(globalkeys)
 -- }}}
 
 -- Applications launched at startup {{{
---awful.util.spawn(torrent_client)
-awful.util.spawn(irc_client)
+if hostname == "burp" then
+	--awful.util.spawn(torrent_client)
+	awful.util.spawn(irc_client)
+	awful.util.spawn(mail_client)
+end
 -- }}}
 
 -- vim:foldmethod=marker
