@@ -55,6 +55,7 @@ browser = "firefox"
 torrent_client = "qbittorrent"
 
 music_player = open_in_multiplexer .. "-S cmus cmus"
+suspend = 'systemctl suspend -i'
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -504,6 +505,7 @@ appLauncherKey = awful.util.table.join(
 	awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end),
 
 	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("truecrypt") end),
+	awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end),
 
 	-- Internet and web
 	awful.key({ modkey,"Mod1"}, "b", function () awful.util.spawn(browser) end),
