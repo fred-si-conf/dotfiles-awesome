@@ -604,7 +604,7 @@ root.keys(globalkeys)
 
 -- Applications launched at startup {{{
 if hostname == "burp" then
-	--awful.util.spawn(torrent_client)
+	awful.util.spawn(torrent_client)
 	awful.util.spawn(irc_client)
 	awful.util.spawn(mail_client)
 end
