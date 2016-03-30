@@ -63,7 +63,7 @@ if hostname == "burp" then
 	music_player = open_in_multiplexer .. "-S cmus cmus"
 	torrent_client = "qbittorrent"
 elseif hostname == "lysa" then
-	file_manager = "pcmanfm"
+	file_manager = "xfe"
 end
 
 
@@ -490,7 +490,9 @@ awful.rules.rules = {
       properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
 	{ rule = { class = "Firefox" },
-      properties = { tag = tags[1][7] } },
+      properties = { tag = tags[1][2] } },
+	--{ rule = { class = "Firefox", name = 'soundcloud' },
+      --properties = { tag = tags[1][8] } },
 	{ rule = { class = "Thunderbird" },
       properties = { tag = tags[1][9] } },
 }
