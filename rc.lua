@@ -54,7 +54,7 @@ editor = "gvim"
 editor_cmd = open_in_term .. editor
 
 mail_client = "thunderbird"
-irc_client = open_in_multiplexer .. "-S weechat weechat" 
+irc_client = open_in_multiplexer .. "-S irc weechat" 
 
 browser = "firefox"
 
