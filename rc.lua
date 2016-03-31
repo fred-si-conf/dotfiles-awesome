@@ -57,7 +57,7 @@ editor_cmd = open_in_term .. editor
 -- Internet
 browser = "firefox"
 mail_client = "thunderbird"
-irc_client = open_in_multiplexer .. "-S weechat weechat" 
+irc_client = open_in_multiplexer .. "-S irc weechat" 
 
 if hostname == "burp" then
 	suspend = 'systemctl suspend -i'
