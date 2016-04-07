@@ -384,88 +384,106 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 
-	-- Sound keys {{{
-	if hostname == "burp" then -- {{{
-		local sound = {}
-		sound.card = ",0"
-		sound.control = " Master"
-		sound.step = " 10%"
-		sound.command = "amixer set" .. sound.control .. sound.card
-		sound.toggle = sound.command .. " toggle"
-		sound.down = sound.command .. sound.step .. "-"
-		sound.up = sound.command .. sound.step .. "+"
+-- Sound keys {{{
+if hostname == "burp" then -- {{{
+	local sound = {}
+	sound.card = ",0"
+	sound.control = " Master"
+	sound.step = " 10%"
+	sound.command = "amixer set" .. sound.control .. sound.card
+	sound.toggle = sound.command .. " toggle"
+	sound.down = sound.command .. sound.step .. "-"
+	sound.up = sound.command .. sound.step .. "+"
 
 
-		sound_keys = awful.util.table.join(
-			awful.key({} ,"XF86AudioMute", function () awful.util.spawn(sound.toggle) end),
-			awful.key({} ,"XF86AudioLowerVolume", function () awful.util.spawn(sound.down) end),
-			awful.key({} ,"XF86AudioRaiseVolume", function () awful.util.spawn_with_shell(sound.up) end)
-		)
+	sound_keys = awful.util.table.join(
+		awful.key({} ,"XF86AudioMute", function () awful.util.spawn(sound.toggle) end),
+		awful.key({} ,"XF86AudioLowerVolume", function () awful.util.spawn(sound.down) end),
+		awful.key({} ,"XF86AudioRaiseVolume", function () awful.util.spawn_with_shell(sound.up) end)
+	)
 
-		globalkeys = awful.util.table.join(
-			globalkeys,
-			sound_keys
-		)
+	globalkeys = awful.util.table.join(
+		globalkeys,
+		sound_keys
+	)
 
-		local music_player_controls = {
-			play = "cmus-remote -u",
-			stop = "cmus-remote -s",
-			previous_track = "cmus-remote -r",
-			next_track = "cmus-remote -n"
-		}
+	local music_player_controls = {
+		play = "cmus-remote -u",
+		stop = "cmus-remote -s",
+		previous_track = "cmus-remote -r",
+		next_track = "cmus-remote -n"
+	}
 
-		music_player_controls_keys = awful.util.table.join(
-			awful.key({} ,"XF86AudioPlay", function () awful.util.spawn(music_player_controls.play) end),
-			awful.key({} ,"XF86AudioStop", function () awful.util.spawn(music_player_controls.stop) end),
-			awful.key({} ,"XF86AudioPrev", function () awful.util.spawn_with_shell(music_player_controls.previous_track) end),
-			awful.key({} ,"XF86AudioNext", function () awful.util.spawn_with_shell(music_player_controls.next_track) end)
-		)
+	music_player_controls_keys = awful.util.table.join(
+		awful.key({} ,"XF86AudioPlay", function () awful.util.spawn(music_player_controls.play) end),
+		awful.key({} ,"XF86AudioStop", function () awful.util.spawn(music_player_controls.stop) end),
+		awful.key({} ,"XF86AudioPrev", function () awful.util.spawn_with_shell(music_player_controls.previous_track) end),
+		awful.key({} ,"XF86AudioNext", function () awful.util.spawn_with_shell(music_player_controls.next_track) end)
+	)
 
-		globalkeys = awful.util.table.join(
-			globalkeys,
-			music_player_controls_keys
-		)
-	-- }}}
-	--
-	elseif hostname == "lysa" then -- {{{
-		local function touchpad_on()
-			io.popen("synclient TouchpadOff=0")
-		end
+	globalkeys = awful.util.table.join(
+		globalkeys,
+		music_player_controls_keys
+	)
+-- }}}
 
-		local function touchpad_off()
-			io.popen("synclient TouchpadOff=1")
-			mouse.coords({x=0, y=0})
-		end
+elseif hostname == "lysa" then -- {{{
+	local function touchpad_get_state()
+		local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
+		local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
 
-		local function touchpad_toggle()
-			local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
-			local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
-
-			if touchpad_state == "0" then
-				touchpad_off()
-			else
-				touchpad_on()
-			end
-			
-		end
-					
-		sound_keys = awful.util.table.join(
-			awful.key({} ,"XF86AudioMute", function () touchpad_toggle() end),
-			awful.key({} ,"XF86AudioLowerVolume", function () io.popen("xbacklight -dec 10") end),
-			awful.key({} ,"XF86AudioRaiseVolume", function () io.popen("xbacklight -inc 10") end)
-		)
-
-		globalkeys = awful.util.table.join(
-			globalkeys,
-			sound_keys
-		)
-
-		touchpad_off()
-
+		return touchpad_state
 	end
-	-- }}}
 
-	-- }}}
+	local function touchpad_off()
+		io.popen("synclient TouchpadOff=1")
+		mouse.coords({x=0, y=0})
+	end
+
+	local function touchpad_on()
+		io.popen("synclient TouchpadOff=0")
+	end
+
+	local function touchpad_toggle()
+		if touchpad_get_state() == "0" then
+			touchpad_off()
+		else
+			touchpad_on()
+		end
+	end
+
+	local function brightness(target)
+		if target == 'max' then
+			io.popen("xbacklight -set 100")
+		elseif target == 'off' then
+			io.popen("xbacklight -set 0")
+		elseif target == 'up' then
+			io.popen("xbacklight -inc 10")
+		elseif target == 'down' then
+			io.popen("xbacklight -dec 10")
+		end
+	end
+				
+	sound_keys = awful.util.table.join(
+		awful.key({} ,"XF86AudioMute", function () touchpad_toggle() end),
+
+		awful.key({} ,"XF86AudioLowerVolume", function () brightness('down') end),
+		awful.key({} ,"XF86AudioRaiseVolume", function () brightness('up') end),
+
+		awful.key({modkey} ,"XF86AudioLowerVolume", function () brightness('off') end),
+		awful.key({modkey} ,"XF86AudioRaiseVolume", function () brightness('max') end)
+	)
+
+	globalkeys = awful.util.table.join(
+		globalkeys,
+		sound_keys
+	)
+
+	touchpad_off()
+end
+-- }}}
+
+-- }}}
 
 -- Set keys
 root.keys(globalkeys)
@@ -615,4 +633,4 @@ if hostname == "burp" then
 end
 -- }}}
 
--- vim:foldmethod=marker
+-- vim:foldmethod=marker: foldcolumn=3
