@@ -445,7 +445,7 @@ elseif hostname == "lysa" then -- {{{
 	end
 
 	local function touchpad_toggle()
-		if touchpad_get_state == "0" then
+		if touchpad_get_state() == "0" then
 			touchpad_off()
 		else
 			touchpad_on()
