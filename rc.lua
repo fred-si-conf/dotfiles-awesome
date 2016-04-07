@@ -54,6 +54,8 @@ open_in_multiplexer = open_in_term .. "screen "
 editor = "gvim"
 editor_cmd = open_in_term .. editor
 
+file_manager = "xfe"
+
 -- Internet
 browser = "firefox"
 mail_client = "thunderbird"
@@ -61,12 +63,8 @@ irc_client = open_in_multiplexer .. "-S irc weechat"
 
 if hostname == "burp" then
 	suspend = 'systemctl suspend -i'
-	file_manager = "thunar"
 	music_player = open_in_multiplexer .. "-S cmus cmus"
 	torrent_client = "qbittorrent"
-
-elseif hostname == "lysa" then
-	file_manager = "xfe"
 end
 
 -- Default modkey.
