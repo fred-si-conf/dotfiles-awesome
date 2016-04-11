@@ -57,6 +57,7 @@ editor = "gvim"
 editor_cmd = open_in_term .. editor
 
 file_manager = "xfe"
+alternative_file_manager = "nautilus"
 
 -- Internet
 browser = "firefox"
@@ -607,6 +608,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 appLauncherKey = awful.util.table.join( 
 	-- Administration
 	awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn(file_manager) end),
+	awful.key({ modkey,"Mod1","Shift"}, "f", function () awful.util.spawn(alternative_file_manager) end),
 	awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end),
 
 	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("truecrypt") end),
