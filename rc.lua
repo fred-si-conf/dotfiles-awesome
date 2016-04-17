@@ -612,6 +612,7 @@ appLauncherKey = awful.util.table.join(
 
 	-- Multimedia
 	awful.key({ modkey,"Mod1"}, "s", function () awful.util.spawn(music_player) end),
+	awful.key({ modkey,"Mod1","Shift"}, "s", function () awful.util.spawn(browser .. " -p soundcloud") end),
 	awful.key({ modkey,"Mod1"}, "c", function () awful.util.spawn("calibre") end),
 
 	-- Divers
