@@ -6,6 +6,7 @@ require("awful.autofocus")
 
 -- Widget and layout library
 local wibox = require("wibox")
+local bashets = require("bashets")
 
 -- Theme handling library
 local beautiful = require("beautiful")
@@ -41,6 +42,7 @@ end
 
 -- {{{ Variable definitions
 hostname = io.open('/etc/hostname'):read()
+config_directory = os.getenv('HOME') .. '/.config/awesome'
 
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init("~/.config/awesome/themes/default/theme.lua")
@@ -146,7 +148,7 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
--- {{{ Wibox
+-- {{{ Widgets
 -- Create a textclock widget
 os.setlocale("fr_FR.UTF-8")
 mytextclock = awful.widget.textclock(" %a %d %b  %H:%M:%S ", 1)
@@ -220,7 +222,7 @@ for s = 1, screen.count() do
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
-
+	
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
     left_layout:add(mylauncher)
@@ -230,6 +232,18 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+	if hostname == "lysa" then
+		batterystatus = wibox.widget.textbox()
+		bashets.register( config_directory .. "/battery.sh",
+						{ widget = batterystatus,
+						  separator = '|',
+						  format = "$1 $2",
+						  update_time = 60 
+						})
+		bashets.start()
+
+		right_layout:add(batterystatus)
+	end
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
@@ -510,7 +524,7 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 2 of screen 1.
 	{ rule = { class = "Firefox" },
       properties = { tag = tags[1][2] } },
-	--{ rule = { class = "Firefox", name = 'soundcloud' },
+	--{ rule = { class = "Firefox", instance = 'clean' },
       --properties = { tag = tags[1][8] } },
 	{ rule = { class = "Thunderbird" },
       properties = { tag = tags[1][9] } },
