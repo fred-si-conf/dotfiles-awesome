@@ -614,6 +614,7 @@ appLauncherKey = awful.util.table.join(
 
 	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("truecrypt") end),
 	awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end),
+	awful.key({ modkey,"Mod1","Shift" }, "w", function () io.popen("systemctl poweroff -i") end),
 
 	-- Internet and web
 	awful.key({ modkey,"Mod1"}, "v", function () awful.util.spawn(browser .. " -p default") end),
