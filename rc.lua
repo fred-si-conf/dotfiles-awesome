@@ -266,36 +266,8 @@ root.buttons(awful.util.table.join(
 ))
 -- }}}
 
-function test_propertie() 
-	-- client.instances() -- nombre total de clients sur tout les tags
-	c = client.get()
-	local c_type = ''
-	for i, j in pairs(c) do
-		c_type =  c_type .. i .. ' : ' .. type(j) .. '\n'
-	end
-	--c_type = type(c)
-
-	naughty.notify({ 
-					timeout = 60,
-					title = "awful.client",
-					--text = c
-					--text = tostring(c)
-					text = c_type
-	})
-	naughty.notify({ 
-					timeout = 60,
-					title = "awful.client",
-					text = type(awful.client.property.get(c[1], 'fx'))
-	})
-	naughty.notify({ 
-					timeout = 60,
-					title = "awful.client",
-					text = type(c)
-	})
-end
 -- {{{ Key bindings 
 globalkeys = awful.util.table.join(
-
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey, "Control" }, "t",   awful.tag.viewprev       ),
@@ -553,12 +525,10 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 2 of screen 1.
 	{ rule = { class = "Firefox" },
       properties = { tag = tags[1][2] } },
-	--{ rule = { class = "Firefox", name = string.match(client.name, ".+Navigation privée.*") },
+	--{ rule = { class = "Firefox", instance = 'clean' },
       --properties = { tag = tags[1][8] } },
 	{ rule = { class = "Thunderbird" },
       properties = { tag = tags[1][9] } },
-	--{ rule = { name = "tmux" },
-	 -- properties = { tag = tags[1][9] } }
 }
 -- }}}
 
@@ -643,9 +613,8 @@ appLauncherKey = awful.util.table.join(
 	awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end),
 
 	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("truecrypt") end),
-
-
-
+	awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end),
+	awful.key({ modkey,"Mod1","Shift" }, "w", function () io.popen("systemctl poweroff -i") end),
 
 	-- Internet and web
 	awful.key({ modkey,"Mod1"}, "v", function () awful.util.spawn(browser .. " -p default") end),
@@ -667,29 +636,13 @@ appLauncherKey = awful.util.table.join(
 	
 )
 
--- }}}
-
--- Host specific keybinding {{{
-	if hostname == "burp" then
-		hostSpecificKey = awful.util.table.join( 
-			awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end)
-		)
-
-	elseif hostname == "lysa" then
-		hostSpecificKey = awful.util.table.join( 
-			awful.key({ modkey,"Mod1"}, "w", function () test_propertie() end)
-		)
-
-	end
--- }}}
-
 globalkeys = awful.util.table.join(
 	globalkeys,
-	appLauncherKey,
-	hostSpecificKey
+	appLauncherKey
 )
 
 root.keys(globalkeys)
+-- }}}
 
 -- Applications launched at startup {{{
 if hostname == "burp" then
@@ -698,4 +651,5 @@ if hostname == "burp" then
 	awful.util.spawn(mail_client)
 end
 -- }}}
+
 -- vim:foldmethod=marker: foldcolumn=3
