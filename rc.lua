@@ -528,7 +528,7 @@ awful.rules.rules = {
 	--{ rule = { class = "Firefox", instance = 'clean' },
       --properties = { tag = tags[1][8] } },
 	{ rule = { class = "Thunderbird" },
-      properties = { tag = tags[1][9] } },
+      properties = { tag = tags[1][1] } },
 }
 -- }}}
 
