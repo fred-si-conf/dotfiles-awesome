@@ -6,7 +6,6 @@ require("awful.autofocus")
 
 -- Widget and layout library
 local wibox = require("wibox")
-local bashets = require("bashets")
 
 -- Theme handling library
 local beautiful = require("beautiful")
@@ -233,6 +232,8 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
 	if hostname == "lysa" then
+		local bashets = require("bashets")
+
 		batterystatus = wibox.widget.textbox()
 		bashets.register( config_directory .. "/battery.sh",
 						{ widget = batterystatus,
@@ -555,9 +556,7 @@ awful.rules.rules = {
 	--{ rule = { class = "Firefox", name = string.match(client.name, ".+Navigation privée.*") },
       --properties = { tag = tags[1][8] } },
 	{ rule = { class = "Thunderbird" },
-      properties = { tag = tags[1][9] } },
-	--{ rule = { name = "tmux" },
-	 -- properties = { tag = tags[1][9] } }
+      properties = { tag = tags[1][1] } },
 }
 -- }}}
 
@@ -643,8 +642,7 @@ appLauncherKey = awful.util.table.join(
 
 	awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("truecrypt") end),
 
-
-
+	awful.key({ modkey,"Mod1","Shift" }, "w", function () io.popen("systemctl poweroff -i") end),
 
 	-- Internet and web
 	awful.key({ modkey,"Mod1"}, "v", function () awful.util.spawn(browser .. " -p default") end),
@@ -658,6 +656,7 @@ appLauncherKey = awful.util.table.join(
 
 	-- Multimedia
 	awful.key({ modkey,"Mod1"}, "s", function () awful.util.spawn(music_player) end),
+	awful.key({ modkey,"Mod1","Shift"}, "s", function () awful.util.spawn(browser .. " -p soundcloud") end),
 	awful.key({ modkey,"Mod1"}, "c", function () awful.util.spawn("calibre") end),
 
 	-- Divers
@@ -692,7 +691,7 @@ root.keys(globalkeys)
 -- Applications launched at startup {{{
 if hostname == "burp" then
 	awful.util.spawn(torrent_client)
-	awful.util.spawn(irc_client)
+--	awful.util.spawn(irc_client)
 	awful.util.spawn(mail_client)
 end
 -- }}}
