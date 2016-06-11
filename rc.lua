@@ -283,8 +283,7 @@ function test_propertie()
 end
 
 -- Key bindings 
-	globalkeys = awful.util.table.join(
-
+	awesomeManagingKeys = awful.util.table.join(
 		awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
 		awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
 		awful.key({ modkey, "Control" }, "t",   awful.tag.viewprev       ),
@@ -316,8 +315,6 @@ end
 			end),
 
 		-- Standard program
-		awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
-		awful.key({ modkey,           }, "a", function () awful.util.spawn(terminal .. " -e man awesome") end),
 		awful.key({ modkey, "Control" }, "h", awesome.restart),
 		awful.key({ modkey, "Control"   }, "q", awesome.quit),
 
@@ -346,6 +343,139 @@ end
 		awful.key({ modkey }, "p", function() menubar.show() end)
 	)
 
+	applicationLaunchingKeys = awful.util.table.join( 
+		-- Administration
+			awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
+			awful.key({ modkey,           }, "a", function () awful.util.spawn(terminal .. " -e man awesome") end),
+			awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn(file_manager) end),
+			awful.key({ modkey,"Mod1","Shift"}, "f", function () awful.util.spawn(alternative_file_manager) end),
+			awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end),
+
+			awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("truecrypt") end),
+
+			awful.key({ modkey,"Mod1","Shift" }, "w", function () io.popen("systemctl poweroff -i") end),
+
+		-- Internet and web
+			awful.key({ modkey,"Mod1"}, "v", function () awful.util.spawn(browser .. " -p default") end),
+			awful.key({ modkey,"Mod1"}, "d", function () awful.util.spawn(browser .. " -p clean") end),
+			awful.key({ modkey,"Mod1"}, "l", function () awful.util.spawn(browser .. " -P") end),
+
+			awful.key({ modkey,"Mod1"}, "m", function () awful.util.spawn(mail_client) end),
+			awful.key({ modkey,"Mod1"}, "i", function () awful.util.spawn(irc_client) end),
+
+			awful.key({ modkey,"Mod1"}, "h", function () awful.util.spawn("filezilla") end),
+
+		-- Multimedia
+			awful.key({ modkey,"Mod1"}, "s", function () awful.util.spawn(music_player) end),
+			awful.key({ modkey,"Mod1","Shift"}, "s", function () awful.util.spawn(browser .. " -p soundcloud") end),
+			awful.key({ modkey,"Mod1"}, "c", function () awful.util.spawn("calibre") end),
+
+		-- Divers
+			awful.key({ modkey,"Mod1"}, "z", function () awful.util.spawn("zim") end)
+	)
+
+	-- Host specific keybinding
+		if hostname == "burp" then
+			hostSpecificKeys = awful.util.table.join( 
+				awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end)
+			)
+
+		elseif hostname == "lysa" then
+			hostSpecificKeys = awful.util.table.join( 
+				awful.key({ modkey,"Mod1"}, "w", function () test_propertie() end)
+			)
+
+		end
+
+	-- Multimedia keys
+		if hostname == "burp" then
+			local sound = {}
+				sound.card = ",0"
+				sound.control = " Master"
+				sound.step = " 10%"
+				sound.command = "amixer set" .. sound.control .. sound.card
+				sound.toggle = sound.command .. " toggle"
+				sound.down = sound.command .. sound.step .. "-"
+				sound.up = sound.command .. sound.step .. "+"
+
+			local music_player_controls = {
+				play = "cmus-remote -u",
+				stop = "cmus-remote -s",
+				previous_track = "cmus-remote -r",
+				next_track = "cmus-remote -n"
+			}
+
+			multimediaKeys = awful.util.table.join(
+				awful.key({} ,"XF86AudioMute", function () awful.util.spawn(sound.toggle) end),
+				awful.key({} ,"XF86AudioLowerVolume", function () awful.util.spawn(sound.down) end),
+				awful.key({} ,"XF86AudioRaiseVolume", function () awful.util.spawn_with_shell(sound.up) end),
+				awful.key({} ,"XF86AudioPlay", function () awful.util.spawn(music_player_controls.play) end),
+				awful.key({} ,"XF86AudioStop", function () awful.util.spawn(music_player_controls.stop) end),
+				awful.key({} ,"XF86AudioPrev", function () awful.util.spawn_with_shell(music_player_controls.previous_track) end),
+				awful.key({} ,"XF86AudioNext", function () awful.util.spawn_with_shell(music_player_controls.next_track) end)
+			)
+
+		elseif hostname == "lysa" then
+			local function touchpad_get_state()
+				local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
+				local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
+
+				return touchpad_state
+			end
+
+			local function touchpad_off()
+				io.popen("synclient TouchpadOff=1")
+				mouse.coords({x=0, y=0})
+			end
+
+			local function touchpad_on()
+				io.popen("synclient TouchpadOff=0")
+			end
+
+			local function touchpad_toggle()
+				if touchpad_get_state() == "0" then
+					touchpad_off()
+				else
+					touchpad_on()
+				end
+			end
+
+			local function brightness(target)
+				if target == 'max' then
+					io.popen("xbacklight -set 100")
+				elseif target == 'off' then
+					io.popen("xbacklight -set 0")
+				elseif target == 'up' then
+					io.popen("xbacklight -inc 10")
+				elseif target == 'down' then
+					io.popen("xbacklight -dec 10")
+				end
+			end
+						
+			multimediaKeys = awful.util.table.join(
+				awful.key({} ,"XF86AudioMute", function () touchpad_toggle() end),
+
+				awful.key({} ,"XF86AudioLowerVolume", function () brightness('down') end),
+				awful.key({} ,"XF86AudioRaiseVolume", function () brightness('up') end),
+
+				awful.key({modkey} ,"XF86AudioLowerVolume", function () brightness('off') end),
+				awful.key({modkey} ,"XF86AudioRaiseVolume", function () brightness('max') end)
+			)
+
+			globalkeys = awful.util.table.join(
+				globalkeys,
+				multimediaKeys
+			)
+
+			touchpad_off()
+		end
+
+	clientbuttons = awful.util.table.join(
+		awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+		awful.button({ modkey }, 1, awful.mouse.client.move),
+		awful.button({ modkey }, 3, awful.mouse.client.resize))
+
+
 	clientkeys = awful.util.table.join(
 		awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
 		awful.key({ modkey, "Shift"   }, "x",      function (c) c:kill()                         end),
@@ -366,12 +496,18 @@ end
 			end)
 	)
 
+	globalKeys = awful.util.table.join(
+		awesomeManagingKeys,
+		applicationLaunchingKeys,
+		hostSpecificKeys,
+		multimediaKeys
+	)
 
 	-- Bind all key numbers to tags.
 	-- Be careful: we use keycodes to make it works on any keyboard layout.
 	-- This should map on the top row of your keyboard, usually 1 to 9.
 	for i = 1, 9 do
-		globalkeys = awful.util.table.join(globalkeys,
+		globalKeys = awful.util.table.join(globalKeys,
 			-- View tag only.
 			awful.key({ modkey }, "#" .. i + 9,
 					  function ()
@@ -412,110 +548,7 @@ end
 					  end))
 	end
 
-	clientbuttons = awful.util.table.join(
-		awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
-		awful.button({ modkey }, 1, awful.mouse.client.move),
-		awful.button({ modkey }, 3, awful.mouse.client.resize))
-
-	-- Sound keys
-		if hostname == "burp" then
-			local sound = {}
-			sound.card = ",0"
-			sound.control = " Master"
-			sound.step = " 10%"
-			sound.command = "amixer set" .. sound.control .. sound.card
-			sound.toggle = sound.command .. " toggle"
-			sound.down = sound.command .. sound.step .. "-"
-			sound.up = sound.command .. sound.step .. "+"
-
-
-			sound_keys = awful.util.table.join(
-				awful.key({} ,"XF86AudioMute", function () awful.util.spawn(sound.toggle) end),
-				awful.key({} ,"XF86AudioLowerVolume", function () awful.util.spawn(sound.down) end),
-				awful.key({} ,"XF86AudioRaiseVolume", function () awful.util.spawn_with_shell(sound.up) end)
-			)
-
-			globalkeys = awful.util.table.join(
-				globalkeys,
-				sound_keys
-			)
-
-			local music_player_controls = {
-				play = "cmus-remote -u",
-				stop = "cmus-remote -s",
-				previous_track = "cmus-remote -r",
-				next_track = "cmus-remote -n"
-			}
-
-			music_player_controls_keys = awful.util.table.join(
-				awful.key({} ,"XF86AudioPlay", function () awful.util.spawn(music_player_controls.play) end),
-				awful.key({} ,"XF86AudioStop", function () awful.util.spawn(music_player_controls.stop) end),
-				awful.key({} ,"XF86AudioPrev", function () awful.util.spawn_with_shell(music_player_controls.previous_track) end),
-				awful.key({} ,"XF86AudioNext", function () awful.util.spawn_with_shell(music_player_controls.next_track) end)
-			)
-
-			globalkeys = awful.util.table.join(
-				globalkeys,
-				music_player_controls_keys
-			)
-
-		elseif hostname == "lysa" then
-			local function touchpad_get_state()
-				local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
-				local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
-
-				return touchpad_state
-			end
-
-			local function touchpad_off()
-				io.popen("synclient TouchpadOff=1")
-				mouse.coords({x=0, y=0})
-			end
-
-			local function touchpad_on()
-				io.popen("synclient TouchpadOff=0")
-			end
-
-			local function touchpad_toggle()
-				if touchpad_get_state() == "0" then
-					touchpad_off()
-				else
-					touchpad_on()
-				end
-			end
-
-			local function brightness(target)
-				if target == 'max' then
-					io.popen("xbacklight -set 100")
-				elseif target == 'off' then
-					io.popen("xbacklight -set 0")
-				elseif target == 'up' then
-					io.popen("xbacklight -inc 10")
-				elseif target == 'down' then
-					io.popen("xbacklight -dec 10")
-				end
-			end
-						
-			sound_keys = awful.util.table.join(
-				awful.key({} ,"XF86AudioMute", function () touchpad_toggle() end),
-
-				awful.key({} ,"XF86AudioLowerVolume", function () brightness('down') end),
-				awful.key({} ,"XF86AudioRaiseVolume", function () brightness('up') end),
-
-				awful.key({modkey} ,"XF86AudioLowerVolume", function () brightness('off') end),
-				awful.key({modkey} ,"XF86AudioRaiseVolume", function () brightness('max') end)
-			)
-
-			globalkeys = awful.util.table.join(
-				globalkeys,
-				sound_keys
-			)
-
-			touchpad_off()
-		end
-
-
-	root.keys(globalkeys)
+	root.keys(globalKeys)
 
 -- Rules to apply to new clients (through the "manage" signal).
 	awful.rules.rules = {
@@ -623,57 +656,6 @@ end
 
 	client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 	client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
-
--- Applications launchers keybinding
-appLauncherKey = awful.util.table.join( 
-	-- Administration
-		awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn(file_manager) end),
-		awful.key({ modkey,"Mod1","Shift"}, "f", function () awful.util.spawn(alternative_file_manager) end),
-		awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end),
-
-		awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("truecrypt") end),
-
-		awful.key({ modkey,"Mod1","Shift" }, "w", function () io.popen("systemctl poweroff -i") end),
-
-	-- Internet and web
-		awful.key({ modkey,"Mod1"}, "v", function () awful.util.spawn(browser .. " -p default") end),
-		awful.key({ modkey,"Mod1"}, "d", function () awful.util.spawn(browser .. " -p clean") end),
-		awful.key({ modkey,"Mod1"}, "l", function () awful.util.spawn(browser .. " -P") end),
-
-		awful.key({ modkey,"Mod1"}, "m", function () awful.util.spawn(mail_client) end),
-		awful.key({ modkey,"Mod1"}, "i", function () awful.util.spawn(irc_client) end),
-
-		awful.key({ modkey,"Mod1"}, "h", function () awful.util.spawn("filezilla") end),
-
-	-- Multimedia
-		awful.key({ modkey,"Mod1"}, "s", function () awful.util.spawn(music_player) end),
-		awful.key({ modkey,"Mod1","Shift"}, "s", function () awful.util.spawn(browser .. " -p soundcloud") end),
-		awful.key({ modkey,"Mod1"}, "c", function () awful.util.spawn("calibre") end),
-
-	-- Divers
-		awful.key({ modkey,"Mod1"}, "z", function () awful.util.spawn("zim") end)
-)
-
--- Host specific keybinding
-	if hostname == "burp" then
-		hostSpecificKey = awful.util.table.join( 
-			awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end)
-		)
-
-	elseif hostname == "lysa" then
-		hostSpecificKey = awful.util.table.join( 
-			awful.key({ modkey,"Mod1"}, "w", function () test_propertie() end)
-		)
-
-	end
-
-globalkeys = awful.util.table.join(
-	globalkeys,
-	appLauncherKey,
-	hostSpecificKey
-)
-
-root.keys(globalkeys)
 
 -- Applications launched at startup
 	if hostname == "burp" then
