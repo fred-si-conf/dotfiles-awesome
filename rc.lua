@@ -390,15 +390,14 @@ end
 
 	-- Multimedia keys
 		if hostname == "burp" then
-			local sound = {
-				card = ",0",
-				control = " Master",
-				step = " 10%",
-				command = "amixer set" .. sound.control .. sound.card,
-				toggle = sound.command .. " toggle",
-				down = sound.command .. sound.step .. "-",
-				up = sound.command .. sound.step .. "+"
-			}
+			local sound = {}
+				sound.card = ",0"
+				sound.control = " Master"
+				sound.step = " 10%"
+				sound.command = "amixer set" .. sound.control .. sound.card
+				sound.toggle = sound.command .. " toggle"
+				sound.down = sound.command .. sound.step .. "-"
+				sound.up = sound.command .. sound.step .. "+"
 
 			local music_player_controls = {
 				play = "cmus-remote -u",
@@ -421,31 +420,30 @@ end
 			)
 
 		elseif hostname == "lysa" then
-			local touchpad = {
-				get_state = function()
-					local touchpad_infos = io.popen("synclient -l | grep 'TouchpadOff'")
-					local touchpad_state = string.match(touchpad_infos:read("*l"), '(%d)')
+			local touchpad = {}
+			touchpad.get_state = function()
+				local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
+				local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
 
-					return touchpad_state
-				end,
+				return touchpad_state
+			end
 
-				switch_off = function()
-					io.popen("synclient TouchpadOff=1")
-					mouse.coords({x=0, y=0})
-				end,
+			touchpad.switch_off = function()
+				io.popen("synclient TouchpadOff=1")
+				mouse.coords({x=0, y=0})
+			end
 
-				switch_on = function()
-					io.popen("synclient TouchpadOff=0")
-				end,
+			touchpad.switch_on = function()
+				io.popen("synclient TouchpadOff=0")
+			end
 
-				toggle_state = function()
-					if touchpad.get_state() == "0" then
-						touchpad.switch_off()
-					else
-						touchpad.switch_on()
-					end
+			touchpad.toggle_state = function()
+				if touchpad.get_state() == "0" then
+					touchpad.switch_off()
+				else
+					touchpad.switch_on()
 				end
-			}		
+			end
 
 			local function brightness(target)
 				if target == 'max' then
@@ -665,5 +663,4 @@ end
 	--	awful.util.spawn(irc_client)
 		awful.util.spawn(mail_client)
 	end
-
 -- vim:foldmethod=indent: foldcolumn=4
