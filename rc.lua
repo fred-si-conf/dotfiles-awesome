@@ -407,9 +407,12 @@ end
 			}
 
 			multimediaKeys = awful.util.table.join(
+				-- Sound control
 				awful.key({} ,"XF86AudioMute", function () awful.util.spawn(sound.toggle) end),
 				awful.key({} ,"XF86AudioLowerVolume", function () awful.util.spawn(sound.down) end),
 				awful.key({} ,"XF86AudioRaiseVolume", function () awful.util.spawn_with_shell(sound.up) end),
+
+				-- Music player control
 				awful.key({} ,"XF86AudioPlay", function () awful.util.spawn(music_player_controls.play) end),
 				awful.key({} ,"XF86AudioStop", function () awful.util.spawn(music_player_controls.stop) end),
 				awful.key({} ,"XF86AudioPrev", function () awful.util.spawn_with_shell(music_player_controls.previous_track) end),
