@@ -47,10 +47,9 @@ config_directory = os.getenv('HOME') .. '/.config/awesome'
 beautiful.init("~/.config/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-io.popen('urxvtd -o -f -q')
+io.popen('pgrep urxvtd || urxvtd -o -f -q')
 terminal = "urxvtc"
 open_in_term = terminal .. " -e "
-open_in_multiplexer = open_in_term .. "screen "
 
 editor = "gvim"
 editor_cmd = open_in_term .. editor
@@ -61,11 +60,11 @@ alternative_file_manager = "nautilus"
 -- Internet
 browser = "firefox"
 mail_client = "thunderbird"
-irc_client = open_in_multiplexer .. "-S irc weechat" 
+irc_client = open_in_term .. "tmux new-session -s irc weechat" 
 
 if hostname == "burp" then
 	suspend = 'systemctl suspend -i'
-	music_player = open_in_multiplexer .. "-S cmus cmus"
+	music_player = open_in_term .. "tmux new-session -s cmus cmus"
 	torrent_client = "qbittorrent"
 end
 
