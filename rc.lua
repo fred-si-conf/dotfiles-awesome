@@ -290,15 +290,22 @@ end
 		awful.key({ modkey, "Control" }, "s",  awful.tag.viewnext       ),
 		awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
-		awful.key({ modkey,           }, "s",
+		awful.key({ modkey,           }, "s", -- Focus next client
 			function ()
 				awful.client.focus.byidx( 1)
 				if client.focus then client.focus:raise() end
 			end),
-		awful.key({ modkey,           }, "t",
+		awful.key({ modkey,           }, "t", -- Focus previous client
 			function ()
 				awful.client.focus.byidx(-1)
 				if client.focus then client.focus:raise() end
+			end),
+		awful.key({ modkey,           }, "Tab", -- Focus last active client
+			function ()
+				awful.client.focus.history.previous()
+				if client.focus then
+					client.focus:raise()
+				end
 			end),
 		awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
 
@@ -306,13 +313,6 @@ end
 		awful.key({ modkey, "Shift"   }, "s", function () awful.client.swap.byidx(  1)    end),
 		awful.key({ modkey, "Shift"   }, "t", function () awful.client.swap.byidx( -1)    end),
 		awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
-		awful.key({ modkey,           }, "Tab",
-			function ()
-				awful.client.focus.history.previous()
-				if client.focus then
-					client.focus:raise()
-				end
-			end),
 
 		-- Standard program
 		awful.key({ modkey, "Control" }, "h", awesome.restart),
@@ -332,13 +332,14 @@ end
 		-- Prompt
 		awful.key({ modkey },            "h",     function () mypromptbox[mouse.screen]:run() end),
 
-		awful.key({ modkey }, "x",
+		awful.key({ modkey }, "x", -- Open lua prompt
 				  function ()
 					  awful.prompt.run({ prompt = "Run Lua code: " },
 					  mypromptbox[mouse.screen].widget,
 					  awful.util.eval, nil,
 					  awful.util.getdir("cache") .. "/history_eval")
 				  end),
+
 		-- Menubar
 		awful.key({ modkey }, "p", function() menubar.show() end)
 	)
