@@ -420,27 +420,28 @@ end
 			)
 
 		elseif hostname == "lysa" then
-			local function touchpad_get_state()
+			local touchpad = {}
+			touchpad.get_state = function()
 				local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
 				local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
 
 				return touchpad_state
 			end
 
-			local function touchpad_off()
+			touchpad.switch_off = function()
 				io.popen("synclient TouchpadOff=1")
 				mouse.coords({x=0, y=0})
 			end
 
-			local function touchpad_on()
+			touchpad.switch_on = function()
 				io.popen("synclient TouchpadOff=0")
 			end
 
-			local function touchpad_toggle()
+			touchpad.toggle_state = function()
 				if touchpad_get_state() == "0" then
-					touchpad_off()
+					touchpad.switch_off()
 				else
-					touchpad_on()
+					touchpad.switch_on()
 				end
 			end
 
@@ -457,7 +458,7 @@ end
 			end
 						
 			multimediaKeys = awful.util.table.join(
-				awful.key({} ,"XF86AudioMute", function () touchpad_toggle() end),
+				awful.key({} ,"XF86AudioMute", function () touchpad.toggle_state() end),
 
 				awful.key({} ,"XF86AudioLowerVolume", function () brightness('down') end),
 				awful.key({} ,"XF86AudioRaiseVolume", function () brightness('up') end),
@@ -466,12 +467,7 @@ end
 				awful.key({modkey} ,"XF86AudioRaiseVolume", function () brightness('max') end)
 			)
 
-			globalkeys = awful.util.table.join(
-				globalkeys,
-				multimediaKeys
-			)
-
-			touchpad_off()
+			touchpad.switch_off()
 		end
 
 	clientbuttons = awful.util.table.join(
