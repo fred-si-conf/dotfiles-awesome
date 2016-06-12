@@ -390,15 +390,14 @@ end
 
 	-- Multimedia keys
 		if hostname == "burp" then
-			local sound = {
-				card = ",0",
-				control = " Master",
-				step = " 10%",
-				command = "amixer set" .. sound.control .. sound.card,
-				toggle = sound.command .. " toggle",
-				down = sound.command .. sound.step .. "-",
-				up = sound.command .. sound.step .. "+"
-			}
+			local sound = {}
+				sound.card = ",0"
+				sound.control = " Master"
+				sound.step = " 10%"
+				sound.command = "amixer set" .. sound.control .. sound.card
+				sound.toggle = sound.command .. " toggle"
+				sound.down = sound.command .. sound.step .. "-"
+				sound.up = sound.command .. sound.step .. "+"
 
 			local music_player_controls = {
 				play = "cmus-remote -u",
@@ -421,82 +420,80 @@ end
 			)
 
 		elseif hostname == "lysa" then
+			local touchpad = {}
+					touchpad.get_state = function()
+						local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
+						local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
 
-			local touchpad = {
-				get_state = function()
-					local touchpad_infos = io.popen("synclient -l | grep 'TouchpadOff'")
-					local touchpad_state = string.match(touchpad_infos:read("*l"), '(%d)')
+						return touchpad_state
+					end
 
-					return touchpad_state
-				end,
+					touchpad.switch_off = function()
+						io.popen("synclient TouchpadOff=1")
+						mouse.coords({x=0, y=0})
+					end
 
-				switch_off = function()
-					io.popen("synclient TouchpadOff=1")
-					mouse.coords({x=0, y=0})
-				end,
+					touchpad.switch_on = function()
+						io.popen("synclient TouchpadOff=0")
+					end
 
-				switch_on = function()
-					io.popen("synclient TouchpadOff=0")
-				end,
+					touchpad.toggle_state = function()
+						if touchpad_get_state() == "0" then
+							touchpad.switch_off()
+						else
+							touchpad.switch_on()
+						end
+					end
 
-				toggle_state = function()
-					if touchpad.get_state() == "0" then
-						touchpad.switch_off()
-					else
-						touchpad.switch_on()
+				local function brightness(target)
+					if target == 'max' then
+						io.popen("xbacklight -set 100")
+					elseif target == 'off' then
+						io.popen("xbacklight -set 0")
+					elseif target == 'up' then
+						io.popen("xbacklight -inc 10")
+					elseif target == 'down' then
+						io.popen("xbacklight -dec 10")
 					end
 				end
-			}		
+							
+				multimediaKeys = awful.util.table.join(
+					awful.key({} ,"XF86AudioMute", function () touchpad.toggle_state() end),
 
-			local function brightness(target)
-				if target == 'max' then
-					io.popen("xbacklight -set 100")
-				elseif target == 'off' then
-					io.popen("xbacklight -set 0")
-				elseif target == 'up' then
-					io.popen("xbacklight -inc 10")
-				elseif target == 'down' then
-					io.popen("xbacklight -dec 10")
-				end
+					awful.key({} ,"XF86AudioLowerVolume", function () brightness('down') end),
+					awful.key({} ,"XF86AudioRaiseVolume", function () brightness('up') end),
+
+					awful.key({modkey} ,"XF86AudioLowerVolume", function () brightness('off') end),
+					awful.key({modkey} ,"XF86AudioRaiseVolume", function () brightness('max') end)
+				)
+
+				touchpad.switch_off()
 			end
-						
-			multimediaKeys = awful.util.table.join(
-				awful.key({} ,"XF86AudioMute", function () touchpad.toggle_state() end),
 
-				awful.key({} ,"XF86AudioLowerVolume", function () brightness('down') end),
-				awful.key({} ,"XF86AudioRaiseVolume", function () brightness('up') end),
-
-				awful.key({modkey} ,"XF86AudioLowerVolume", function () brightness('off') end),
-				awful.key({modkey} ,"XF86AudioRaiseVolume", function () brightness('max') end)
-			)
-
-			touchpad.switch_off()
-		end
-
-	clientbuttons = awful.util.table.join(
-		awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
-		awful.button({ modkey }, 1, awful.mouse.client.move),
-		awful.button({ modkey }, 3, awful.mouse.client.resize))
+		clientbuttons = awful.util.table.join(
+			awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+			awful.button({ modkey }, 1, awful.mouse.client.move),
+			awful.button({ modkey }, 3, awful.mouse.client.resize))
 
 
-	clientkeys = awful.util.table.join(
-		awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-		awful.key({ modkey, "Shift"   }, "x",      function (c) c:kill()                         end),
-		awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
-		awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-		awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
-		awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
-		awful.key({ modkey,           }, "n",
-			function (c)
-				-- The client currently has the input focus, so it cannot be
-				-- minimized, since minimized clients can't have the focus.
-				c.minimized = true
-			end),
-		awful.key({ modkey,           }, "m",
-			function (c)
-				c.maximized_horizontal = not c.maximized_horizontal
-				c.maximized_vertical   = not c.maximized_vertical
-			end)
+		clientkeys = awful.util.table.join(
+			awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
+			awful.key({ modkey, "Shift"   }, "x",      function (c) c:kill()                         end),
+			awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
+			awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
+			awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
+			awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+			awful.key({ modkey,           }, "n",
+				function (c)
+					-- The client currently has the input focus, so it cannot be
+					-- minimized, since minimized clients can't have the focus.
+					c.minimized = true
+				end),
+			awful.key({ modkey,           }, "m",
+				function (c)
+					c.maximized_horizontal = not c.maximized_horizontal
+					c.maximized_vertical   = not c.maximized_vertical
+				end)
 	)
 
 	globalKeys = awful.util.table.join(
@@ -666,5 +663,4 @@ end
 	--	awful.util.spawn(irc_client)
 		awful.util.spawn(mail_client)
 	end
-
 -- vim:foldmethod=indent: foldcolumn=4
