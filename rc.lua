@@ -421,6 +421,7 @@ end
 			)
 
 		elseif hostname == "lysa" then
+
 			local touchpad = {
 				get_state = function()
 					local touchpad_infos = io.popen("synclient -l | grep 'TouchpadOff'")
