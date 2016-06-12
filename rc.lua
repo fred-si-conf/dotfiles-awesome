@@ -438,7 +438,7 @@ end
 					end
 
 					touchpad.toggle_state = function()
-						if touchpad_get_state() == "0" then
+						if touchpad.get_state() == "0" then
 							touchpad.switch_off()
 						else
 							touchpad.switch_on()
