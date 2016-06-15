@@ -576,13 +576,9 @@ end
 			properties = { floating = true }
 		},
 		{
-			rule = { class = "Firefox" },
-			properties = { tag = tags[1][2] }
-		},
-		{
 			rule = { class = "Thunderbird" },
 			properties = { tag = tags[1][1] }
-		},
+		}
 	}
 
 -- Signals
