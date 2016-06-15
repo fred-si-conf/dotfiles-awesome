@@ -659,4 +659,5 @@ end
 	--	awful.util.spawn(irc_client)
 		awful.util.spawn(mail_client)
 	end
+	awful.util.spawn('owncloud')
 -- vim:foldmethod=indent: foldcolumn=4
