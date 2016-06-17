@@ -359,7 +359,7 @@ end
 		-- Internet and web
 			awful.key({ modkey,"Mod1"}, "v", function () awful.util.spawn(browser .. " -p default") end),
 			awful.key({ modkey,"Mod1"}, "d", function () awful.util.spawn(browser .. " -p clean") end),
-			awful.key({ modkey,"Mod1"}, "l", function () awful.util.spawn(browser .. " -P") end),
+			awful.key({ modkey,"Mod1","shift"}, "d", function () awful.util.spawn(browser .. " -P") end),
 
 			awful.key({ modkey,"Mod1"}, "m", function () awful.util.spawn(mail_client) end),
 			awful.key({ modkey,"Mod1"}, "i", function () awful.util.spawn(irc_client) end),
