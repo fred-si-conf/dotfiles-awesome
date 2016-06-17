@@ -661,6 +661,8 @@ end
 		awful.util.spawn(torrent_client)
 	--	awful.util.spawn(irc_client)
 		awful.util.spawn(mail_client)
+	elseif hostname == "lysa" then
+		awful.util.spawn('gnome-keyring-daemon --start --foreground --componements=secrets')
 	end
 	awful.util.spawn('owncloud')
 -- vim:foldmethod=indent: foldcolumn=4
