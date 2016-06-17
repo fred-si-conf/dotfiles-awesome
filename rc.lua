@@ -372,7 +372,8 @@ end
 			awful.key({ modkey,"Mod1"}, "c", function () awful.util.spawn("calibre") end),
 
 		-- Divers
-			awful.key({ modkey,"Mod1"}, "z", function () awful.util.spawn("zim") end)
+			awful.key({ modkey,"Mod1"}, "z", function () awful.util.spawn("zim") end),
+			awful.key({ modkey,"Mod1"}, "l", function () awful.util.spawn("libreoffice") end)
 	)
 
 	-- Host specific keybinding
