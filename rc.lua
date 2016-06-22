@@ -284,6 +284,8 @@ end
 
 -- Key bindings 
 	awesomeManagingKeys = awful.util.table.join(
+		awful.key({                   }, "Print",   function () io.popen("scrot") end),
+		awful.key({         "Shift"   }, "Print",   function () io.popen("scrot -u") end),
 		awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
 		awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
 		awful.key({ modkey, "Control" }, "t",   awful.tag.viewprev       ),
