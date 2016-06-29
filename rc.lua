@@ -55,6 +55,10 @@
 
 	file_manager = "xfe"
 	alternative_file_manager = "nautilus"
+	
+	lock_image = os.getenv("HOME") .. "/Images/wallpapers/lock.png"
+	i3lock_command = "i3lock -i " .. lock_image .. " --ignore-empty-password --show-failed-attempts"
+	autolock = "xautolock -time 5 -locker '" .. i3lock_command .. "' -secure"
 
 	-- Internet
 	browser = "firefox"
@@ -62,7 +66,7 @@
 	irc_client = open_in_term .. "tmux new-session -s irc weechat" 
 
 	if hostname == "burp" then
-		suspend = 'systemctl suspend -i'
+		suspend = i3lock_command .. ' && systemctl suspend -i'
 		music_player = open_in_term .. "tmux new-session -s cmus cmus"
 		torrent_client = "qbittorrent"
 	end
@@ -664,5 +668,8 @@ end
 	elseif hostname == "lysa" then
 		awful.util.spawn('gnome-keyring-daemon --start --foreground --componements=secrets')
 	end
+
+	awful.util.spawn(autolock)
 	awful.util.spawn('owncloud')
+
 -- vim:foldmethod=indent: foldcolumn=4
