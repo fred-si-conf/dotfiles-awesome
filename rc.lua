@@ -1,3 +1,5 @@
+-- vim:foldmethod=indent: foldcolumn=4
+
 -- Library importation
 	-- Standard awesome library
 		local gears = require("gears")
@@ -39,7 +41,7 @@
 		end)
 	end
 
--- Variable definitions
+-- Variables definitions
 	hostname = io.open('/etc/hostname'):read()
 	config_directory = os.getenv('HOME') .. '/.config/awesome'
 
@@ -58,7 +60,7 @@
 	
 	lock_image = os.getenv("HOME") .. "/Images/wallpapers/lock.png"
 	i3lock_command = "i3lock -i " .. lock_image .. " --ignore-empty-password --show-failed-attempts"
-	autolock = "xautolock -time 5 -locker '" .. i3lock_command .. "' -secure"
+	autolock = "xautolock -time 30 -locker '" .. i3lock_command .. "' -secure"
 
 	-- Internet
 	browser = "firefox"
@@ -106,6 +108,41 @@
 			--awful.layout.suit.spiral,
 		}
 
+	end
+
+-- Misc functions
+	function launch(appName)
+		awful.util.spawn(appName)
+	end
+
+	function launch_in_term(appName)
+		awful.util.spawn_with_shell(appName)
+	end
+
+	function test_propertie() 
+		c = client.get()
+		local c_type = ''
+		for i, j in pairs(c) do
+			c_type =  c_type .. i .. ' : ' .. type(j) .. '\n'
+		end
+
+		naughty.notify({ 
+						timeout = 60,
+						title = "awful.client",
+						--text = c
+						--text = tostring(c)
+						text = c_type
+		})
+		naughty.notify({ 
+						timeout = 60,
+						title = "awful.client",
+						text = type(awful.client.property.get(c[1], 'fx'))
+		})
+		naughty.notify({ 
+						timeout = 60,
+						title = "awful.client",
+						text = type(c)
+		})
 	end
 
 -- Wallpaper
@@ -257,34 +294,6 @@
 		awful.button({ }, 4, awful.tag.viewnext),
 		awful.button({ }, 5, awful.tag.viewprev)
 	))
-
-function test_propertie() 
-	-- client.instances() -- nombre total de clients sur tout les tags
-	c = client.get()
-	local c_type = ''
-	for i, j in pairs(c) do
-		c_type =  c_type .. i .. ' : ' .. type(j) .. '\n'
-	end
-	--c_type = type(c)
-
-	naughty.notify({ 
-					timeout = 60,
-					title = "awful.client",
-					--text = c
-					--text = tostring(c)
-					text = c_type
-	})
-	naughty.notify({ 
-					timeout = 60,
-					title = "awful.client",
-					text = type(awful.client.property.get(c[1], 'fx'))
-	})
-	naughty.notify({ 
-					timeout = 60,
-					title = "awful.client",
-					text = type(c)
-	})
-end
 
 -- Key bindings 
 	awesomeManagingKeys = awful.util.table.join(
@@ -672,4 +681,3 @@ end
 	awful.util.spawn(autolock)
 	awful.util.spawn('owncloud')
 
--- vim:foldmethod=indent: foldcolumn=4
