@@ -361,33 +361,34 @@
 
 	applicationLaunchingKeys = awful.util.table.join( 
 		-- Administration
-			awful.key({ modkey,           }, "Return", function () launch(terminal) end),
-			awful.key({ modkey,"Mod1"}, "f", function () launch(file_manager) end),
+			awful.key({ modkey,           }   , "Return", function () launch(terminal) end),
+			awful.key({ modkey,"Mod1"}        , "f", function () launch(file_manager) end),
 			awful.key({ modkey,"Mod1","Shift"}, "f", function () launch(alternative_file_manager) end),
-			awful.key({ modkey,"Mod1"}, "e", function () launch(editor) end),
+			awful.key({ modkey,"Mod1"}        , "e", function () launch(editor) end),
 
-			awful.key({ modkey,"Mod1"}, "t", function () launch("truecrypt") end),
+			awful.key({ modkey,"Mod1"}        , "t", function () launch("truecrypt") end),
 
-			awful.key({ modkey,"Mod1","Shift" }, "w", function () io.popen("systemctl poweroff -i") end),
+			awful.key({ modkey,"Mod1","Shift"}, "w", function () io.popen("systemctl poweroff -i") end),
 
 		-- Internet and web
-			awful.key({ modkey,"Mod1"}, "v", function () launch(browser .. " -p default") end),
-			awful.key({ modkey,"Mod1"}, "d", function () launch(browser .. " -p clean") end),
+			awful.key({ modkey,"Mod1"}        , "v", function () launch(browser .. " -p default") end),
+			awful.key({ modkey,"Mod1","Shift"}, "v", function () launch(browser .. " -p adopte") end),
+			awful.key({ modkey,"Mod1"}        , "d", function () launch(browser .. " -p clean") end),
 			awful.key({ modkey,"Mod1","Shift"}, "d", function () launch(browser .. " -P") end),
 
-			awful.key({ modkey,"Mod1"}, "m", function () launch(mail_client) end),
-			awful.key({ modkey,"Mod1"}, "i", function () launch(irc_client) end),
+			awful.key({ modkey,"Mod1"}        , "m", function () launch(mail_client) end),
+			awful.key({ modkey,"Mod1"}        , "i", function () launch(irc_client) end),
 
-			awful.key({ modkey,"Mod1"}, "h", function () launch("filezilla") end),
+			awful.key({ modkey,"Mod1"}        , "h", function () launch("filezilla") end),
 
 		-- Multimedia
-			awful.key({ modkey,"Mod1"}, "s", function () launch(music_player) end),
+			awful.key({ modkey,"Mod1"}        , "s", function () launch(music_player) end),
 			awful.key({ modkey,"Mod1","Shift"}, "s", function () launch(browser .. " -p soundcloud") end),
-			awful.key({ modkey,"Mod1"}, "c", function () launch("calibre") end),
+			awful.key({ modkey,"Mod1"}        , "c", function () launch("calibre") end),
 
 		-- Divers
-			awful.key({ modkey,"Mod1"}, "z", function () launch("zim") end),
-			awful.key({ modkey,"Mod1"}, "l", function () launch("libreoffice") end)
+			awful.key({ modkey,"Mod1"}        , "z", function () launch("zim") end),
+			awful.key({ modkey,"Mod1"}        , "l", function () launch("libreoffice") end)
 	)
 
 	-- Host specific keybinding
