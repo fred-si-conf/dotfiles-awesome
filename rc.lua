@@ -115,7 +115,7 @@
 		awful.util.spawn(appName)
 	end
 
-	function launch_in_term(appName)
+	function launch_in_shell(appName)
 		awful.util.spawn_with_shell(appName)
 	end
 
@@ -361,34 +361,34 @@
 
 	applicationLaunchingKeys = awful.util.table.join( 
 		-- Administration
-			awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
-			awful.key({ modkey,           }, "a", function () awful.util.spawn(terminal .. " -e man awesome") end),
-			awful.key({ modkey,"Mod1"}, "f", function () awful.util.spawn(file_manager) end),
-			awful.key({ modkey,"Mod1","Shift"}, "f", function () awful.util.spawn(alternative_file_manager) end),
-			awful.key({ modkey,"Mod1"}, "e", function () awful.util.spawn(editor) end),
+			awful.key({ modkey,           }, "Return", function () launch(terminal) end),
+			awful.key({ modkey,           }, "a", function () launch(terminal .. " -e man awesome") end),
+			awful.key({ modkey,"Mod1"}, "f", function () launch(file_manager) end),
+			awful.key({ modkey,"Mod1","Shift"}, "f", function () launch(alternative_file_manager) end),
+			awful.key({ modkey,"Mod1"}, "e", function () launch(editor) end),
 
-			awful.key({ modkey,"Mod1"}, "t", function () awful.util.spawn("truecrypt") end),
+			awful.key({ modkey,"Mod1"}, "t", function () launch("truecrypt") end),
 
 			awful.key({ modkey,"Mod1","Shift" }, "w", function () io.popen("systemctl poweroff -i") end),
 
 		-- Internet and web
-			awful.key({ modkey,"Mod1"}, "v", function () awful.util.spawn(browser .. " -p default") end),
-			awful.key({ modkey,"Mod1"}, "d", function () awful.util.spawn(browser .. " -p clean") end),
-			awful.key({ modkey,"Mod1","Shift"}, "d", function () awful.util.spawn(browser .. " -P") end),
+			awful.key({ modkey,"Mod1"}, "v", function () launch(browser .. " -p default") end),
+			awful.key({ modkey,"Mod1"}, "d", function () launch(browser .. " -p clean") end),
+			awful.key({ modkey,"Mod1","Shift"}, "d", function () launch(browser .. " -P") end),
 
-			awful.key({ modkey,"Mod1"}, "m", function () awful.util.spawn(mail_client) end),
-			awful.key({ modkey,"Mod1"}, "i", function () awful.util.spawn(irc_client) end),
+			awful.key({ modkey,"Mod1"}, "m", function () launch(mail_client) end),
+			awful.key({ modkey,"Mod1"}, "i", function () launch(irc_client) end),
 
-			awful.key({ modkey,"Mod1"}, "h", function () awful.util.spawn("filezilla") end),
+			awful.key({ modkey,"Mod1"}, "h", function () launch("filezilla") end),
 
 		-- Multimedia
-			awful.key({ modkey,"Mod1"}, "s", function () awful.util.spawn(music_player) end),
-			awful.key({ modkey,"Mod1","Shift"}, "s", function () awful.util.spawn(browser .. " -p soundcloud") end),
-			awful.key({ modkey,"Mod1"}, "c", function () awful.util.spawn("calibre") end),
+			awful.key({ modkey,"Mod1"}, "s", function () launch(music_player) end),
+			awful.key({ modkey,"Mod1","Shift"}, "s", function () launch(browser .. " -p soundcloud") end),
+			awful.key({ modkey,"Mod1"}, "c", function () launch("calibre") end),
 
 		-- Divers
-			awful.key({ modkey,"Mod1"}, "z", function () awful.util.spawn("zim") end),
-			awful.key({ modkey,"Mod1"}, "l", function () awful.util.spawn("libreoffice") end)
+			awful.key({ modkey,"Mod1"}, "z", function () launch("zim") end),
+			awful.key({ modkey,"Mod1"}, "l", function () launch("libreoffice") end)
 	)
 
 	-- Host specific keybinding
@@ -424,15 +424,15 @@
 
 			multimediaKeys = awful.util.table.join(
 				-- Sound control
-				awful.key({} ,"XF86AudioMute", function () awful.util.spawn(sound.toggle) end),
-				awful.key({} ,"XF86AudioLowerVolume", function () awful.util.spawn(sound.down) end),
-				awful.key({} ,"XF86AudioRaiseVolume", function () awful.util.spawn_with_shell(sound.up) end),
+				awful.key({} ,"XF86AudioMute", function () launch(sound.toggle) end),
+				awful.key({} ,"XF86AudioLowerVolume", function () launch(sound.down) end),
+				awful.key({} ,"XF86AudioRaiseVolume", function () launch_in_shell(sound.up) end),
 
 				-- Music player control
-				awful.key({} ,"XF86AudioPlay", function () awful.util.spawn(music_player_controls.play) end),
-				awful.key({} ,"XF86AudioStop", function () awful.util.spawn(music_player_controls.stop) end),
-				awful.key({} ,"XF86AudioPrev", function () awful.util.spawn_with_shell(music_player_controls.previous_track) end),
-				awful.key({} ,"XF86AudioNext", function () awful.util.spawn_with_shell(music_player_controls.next_track) end)
+				awful.key({} ,"XF86AudioPlay", function () launch(music_player_controls.play) end),
+				awful.key({} ,"XF86AudioStop", function () launch(music_player_controls.stop) end),
+				awful.key({} ,"XF86AudioPrev", function () launch_in_shell(music_player_controls.previous_track) end),
+				awful.key({} ,"XF86AudioNext", function () launch_in_shell(music_player_controls.next_track) end)
 			)
 
 		elseif hostname == "lysa" then
@@ -671,13 +671,13 @@
 
 -- Applications launched at startup
 	if hostname == "burp" then
-		awful.util.spawn(torrent_client)
-	--	awful.util.spawn(irc_client)
-		awful.util.spawn(mail_client)
+		launch(torrent_client)
+	--	launch(irc_client)
+		launch(mail_client)
 	elseif hostname == "lysa" then
-		awful.util.spawn('gnome-keyring-daemon --start --foreground --componements=secrets')
+		launch('gnome-keyring-daemon --start --foreground --componements=secrets')
 	end
 
-	awful.util.spawn(autolock)
-	awful.util.spawn('owncloud')
+	launch(autolock)
+	launch('owncloud')
 
