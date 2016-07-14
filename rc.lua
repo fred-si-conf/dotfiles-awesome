@@ -362,7 +362,6 @@
 	applicationLaunchingKeys = awful.util.table.join( 
 		-- Administration
 			awful.key({ modkey,           }, "Return", function () launch(terminal) end),
-			awful.key({ modkey,           }, "a", function () launch(terminal .. " -e man awesome") end),
 			awful.key({ modkey,"Mod1"}, "f", function () launch(file_manager) end),
 			awful.key({ modkey,"Mod1","Shift"}, "f", function () launch(alternative_file_manager) end),
 			awful.key({ modkey,"Mod1"}, "e", function () launch(editor) end),
