@@ -374,7 +374,7 @@
 			awful.key({ modkey,"Mod1"}        , "v", function () launch(browser .. " -p default") end),
 			awful.key({ modkey,"Mod1","Shift"}, "v", function () launch(browser .. " -p adopte") end),
 			awful.key({ modkey,"Mod1"}        , "d", function () launch(browser .. " -p clean") end),
-			awful.key({ modkey,"Mod1","Shift"}, "d", function () launch(browser .. " -P") end),
+			awful.key({ modkey,"Mod1","Shift"}, "d", function () launch(browser .. " -p vol") end),
 
 			awful.key({ modkey,"Mod1"}        , "m", function () launch(mail_client) end),
 			awful.key({ modkey,"Mod1"}        , "i", function () launch(irc_client) end),
