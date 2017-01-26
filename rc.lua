@@ -59,7 +59,8 @@
 	alternative_file_manager = "nautilus"
 	
 	lock_image = os.getenv("HOME") .. "/Images/wallpapers/lock.png"
-	i3lock_command = "i3lock -i " .. lock_image .. " --ignore-empty-password --show-failed-attempts"
+	lock_color = "605050"
+	i3lock_command = "i3lock -i " .. lock_image .. " -c " .. lock_color .. " --ignore-empty-password --show-failed-attempts"
 	autolock = "xautolock -time 30 -locker '" .. i3lock_command .. "' -secure"
 
 	-- Internet
@@ -399,7 +400,7 @@
 
 		elseif hostname == "lysa" then
 			hostSpecificKeys = awful.util.table.join( 
-				awful.key({ modkey,"Mod1"}, "w", function () test_propertie() end)
+			awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end)
 			)
 
 		end
