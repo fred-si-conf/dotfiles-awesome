@@ -107,6 +107,12 @@
 			--awful.layout.suit.tile.top,
 			--awful.layout.suit.fair,
 			--awful.layout.suit.spiral,
+			--
+			--awful.layout.suit.tile.bottom,
+			--awful.layout.suit.corner.nw,
+			-- awful.layout.suit.corner.ne,
+			-- awful.layout.suit.corner.sw,
+			-- awful.layout.suit.corner.se,
 		}
 
 	end
