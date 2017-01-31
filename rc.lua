@@ -412,49 +412,10 @@
 		awful.key({ modkey, "Mod1", "Shift"}, "w", function () io.popen("systemctl poweroff -i") end),
 
 		-- Internet and web
-		awful.key({ modkey, "Mod1"    }     , "v",
-			function ()
-				awful.spawn(
-					browser.default.command,
-					{
-						tag = browser.default.tag
-					}
-				)
-			end
-		),
-
-		awful.key({ modkey, "Mod1", "Shift"}, "v",
-			function ()
-				awful.spawn(
-					browser.adopte.command,
-					{
-						tag = browser.adopte.tag
-					}
-				)
-			end
-		),
-
-		awful.key({ modkey, "Mod1"    }     , "d",
-			function ()
-				awful.spawn(
-					browser.clean.command,
-					{
-						tag = browser.clean.tag
-					}
-				)
-			end
-		),
-
-		awful.key({ modkey, "Mod1", "Shift"}, "d",
-			function ()
-				awful.spawn(
-					browser.vol.command,
-					{
-						tag = browser.vol.tag
-					}
-				)
-			end
-		),
+		awful.key({ modkey, "Mod1"    }     , "v", function () awful.spawn(browser.default.command) end),
+		awful.key({ modkey, "Mod1", "Shift"}, "v", function () awful.spawn(browser.adopte.command) end),
+		awful.key({ modkey, "Mod1"    }     , "d", function () awful.spawn(browser.clean.command) end),
+		awful.key({ modkey, "Mod1", "Shift"}, "d", function () awful.spawn(browser.vol.command) end),
 
 		awful.key({ modkey, "Mod1"    }     , "m", function () awful.spawn(mail_client) end),
 		awful.key({ modkey, "Mod1"    }     , "i", function () awful.spawn(irc_client, {tag = "1"}) end),
@@ -462,7 +423,7 @@
 		awful.key({ modkey, "Mod1"    }     , "h", function () awful.spawn("filezilla") end),
 
 		-- Multimedia
-		awful.key({ modkey, "Mod1"    }     , "s", function () awful.spawn(music_player, {tag = "9"}) end),
+		awful.key({ modkey, "Mod1"    }     , "s", function () awful.spawn(music_player) end),
 
 		awful.key({ modkey, "Mod1", "Shift"}, "s",
 			function ()
@@ -802,8 +763,14 @@
 
 -- Applications launched at startup
 	if hostname == "burp" then
+		awful.spawn(browser.default.command, {tag = browser.default.tag})
+		awful.spawn(browser.adopte.command, {tag = browser.adopte.tag})
+		awful.spawn(browser.clean.command, {tag = browser.clean.tag})
+		awful.spawn(browser.vol.command, {tag = browser.vol.tag})
+		awful.spawn(music_player, {tag = "9"})
+		awful.spawn(terminal .. " -e tmux new-session -s admin", {tag = "5"})
 		awful.spawn(torrent_client)
-	--	awful.spawn(irc_client)
+	--	awful.spawn(irc_client, { tag = "1" })
 		awful.spawn(mail_client)
 
 	elseif hostname == "lysa" then
