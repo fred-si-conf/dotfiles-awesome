@@ -50,10 +50,9 @@
 
 	io.popen('pgrep urxvtd || urxvtd -o -f -q')
 	terminal = "urxvtc"
-	open_in_term = terminal .. " -e "
 
-	editor = "gvim"
-	editor_cmd = open_in_term .. editor
+	editor = "vim"
+	editor_cmd = terminal .. " -e " .. editor
 
 	file_manager = "xfe"
 	alternative_file_manager = "nautilus"
@@ -64,13 +63,40 @@
 	autolock = "xautolock -time 30 -locker '" .. i3lock_command .. "' -secure"
 
 	-- Internet
-	browser = "firefox"
+	browser = {
+		default = {
+			command = "firefox -p default",
+			tag = "2"
+		},
+
+		clean = {
+			command =  "firefox -p clean",
+			tag = "3"
+		},
+
+		adopte =  {
+			command =  "firefox -p adopte",
+			tag = "4"
+		},
+		
+		vol = {
+			command = "firefox -p vol",
+			tag = "4"
+		},
+
+		music = {
+			command = "firefox -p soundcloud",
+			tag = "9"
+		}
+	}
+
+
 	mail_client = "thunderbird"
-	irc_client = open_in_term .. "tmux new-session -s irc weechat" 
+	irc_client = terminal .. " -e tmux new-session -s irc weechat" 
 
 	if hostname == "burp" then
 		suspend = i3lock_command .. ' && systemctl suspend -i'
-		music_player = open_in_term .. "tmux new-session -s cmus cmus"
+		music_player = terminal .. " -e tmux new-session -s cmus cmus"
 		torrent_client = "qbittorrent"
 	end
 
@@ -386,19 +412,69 @@
 		awful.key({ modkey, "Mod1", "Shift"}, "w", function () io.popen("systemctl poweroff -i") end),
 
 		-- Internet and web
-		awful.key({ modkey, "Mod1"    }     , "v", function () awful.spawn(browser .. " -p default") end),
-		awful.key({ modkey, "Mod1", "Shift"}, "v", function () awful.spawn(browser .. " -p adopte") end),
-		awful.key({ modkey, "Mod1"    }     , "d", function () awful.spawn(browser .. " -p clean") end),
-		awful.key({ modkey, "Mod1", "Shift"}, "d", function () awful.spawn(browser .. " -p vol") end),
+		awful.key({ modkey, "Mod1"    }     , "v",
+			function ()
+				awful.spawn(
+					browser.default.command,
+					{
+						tag = browser.default.tag
+					}
+				)
+			end
+		),
+
+		awful.key({ modkey, "Mod1", "Shift"}, "v",
+			function ()
+				awful.spawn(
+					browser.adopte.command,
+					{
+						tag = browser.adopte.tag
+					}
+				)
+			end
+		),
+
+		awful.key({ modkey, "Mod1"    }     , "d",
+			function ()
+				awful.spawn(
+					browser.clean.command,
+					{
+						tag = browser.clean.tag
+					}
+				)
+			end
+		),
+
+		awful.key({ modkey, "Mod1", "Shift"}, "d",
+			function ()
+				awful.spawn(
+					browser.vol.command,
+					{
+						tag = browser.vol.tag
+					}
+				)
+			end
+		),
 
 		awful.key({ modkey, "Mod1"    }     , "m", function () awful.spawn(mail_client) end),
-		awful.key({ modkey, "Mod1"    }     , "i", function () awful.spawn(irc_client) end),
+		awful.key({ modkey, "Mod1"    }     , "i", function () awful.spawn(irc_client, {tag = "1"}) end),
 
 		awful.key({ modkey, "Mod1"    }     , "h", function () awful.spawn("filezilla") end),
 
 		-- Multimedia
-		awful.key({ modkey, "Mod1"    }     , "s", function () awful.spawn(music_player) end),
-		awful.key({ modkey, "Mod1", "Shift"}, "s", function () awful.spawn(browser .. " -p soundcloud") end),
+		awful.key({ modkey, "Mod1"    }     , "s", function () awful.spawn(music_player, {tag = "9"}) end),
+
+		awful.key({ modkey, "Mod1", "Shift"}, "s",
+			function ()
+				awful.spawn(
+					browser.music.command,
+					{
+						tag = browser.music.tag
+					}
+				)
+			end
+		),
+
 		awful.key({ modkey, "Mod1"    }     , "c", function () awful.spawn("calibre") end),
 
 		-- Divers
