@@ -43,7 +43,8 @@
 
 -- Variables definitions
 	hostname = io.open('/etc/hostname'):read()
-	config_directory = os.getenv('HOME') .. '/.config/awesome/'
+	--config_directory = os.getenv('HOME') .. '/.config/awesome/'
+	config_directory = awful.util.getdir("config")
 
 	-- Themes define colours, icons, font and wallpapers.
 	beautiful.init(config_directory .. "themes/mytheme/theme.lua")
