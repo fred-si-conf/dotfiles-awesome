@@ -342,8 +342,9 @@
 -- Key bindings 
 	awesomeManagingKeys = awful.util.table.join(
 		awful.key({ modkey,           }, "j", hotkeys_popup.show_help, {description="show help", group="awesome"}),
-		awful.key({                   }, "Print", function () io.popen("scrot") end),
-		awful.key({         "Shift"   }, "Print", function () io.popen("scrot -u") end),
+		awful.key({                   }, "Print", function () io.popen("scrot -e 'mv $f ~/Images/screenshots'") end),
+		awful.key({         "Shift"   }, "Print", function () io.popen("scrot -u -e 'mv $f ~/Images/screenshots'") end),
+		awful.key({         "Control" }, "Print", function () io.popen("scrot -s -e 'mv $f ~/Images/screenshots'") end),
 		awful.key({ modkey,           }, "Left",  awful.tag.viewprev       ),
 		awful.key({ modkey,           }, "Right", awful.tag.viewnext       ),
 		awful.key({ modkey, "Control" }, "t", awful.tag.viewprev       ),
@@ -683,7 +684,13 @@
 		{
 			rule = { class = "Thunderbird" },
 			properties = { screen = 1, tag = "1" }
+		},
+
+		{
+			rule = { class = "mplayer" },
+			properties = { border_width = 0 }
 		}
+			
 	}
 
 -- Signals
