@@ -776,8 +776,8 @@
 		awful.spawn(browser.vol.command, {tag = browser.vol.tag})
 		awful.spawn(music_player, {tag = "9"})
 		awful.spawn(terminal .. " -e tmux new-session -s admin", {tag = "5"})
-		awful.spawn(torrent_client)
-	--	awful.spawn(irc_client, { tag = "1" })
+		--awful.spawn(torrent_client)
+		--awful.spawn(irc_client, { tag = "1" })
 		awful.spawn(mail_client)
 
 	elseif hostname == "lysa" then
