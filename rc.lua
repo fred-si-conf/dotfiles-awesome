@@ -563,7 +563,9 @@
 			function (c)
 				c.maximized_horizontal = not c.maximized_horizontal
 				c.maximized_vertical   = not c.maximized_vertical
-			end)
+			end),
+		awful.key({ modkey,  "Shift"   }, "m", function (c) c.maximized = not c.maximized end,
+                  { description = "Toggle maximized", group = "client"})
 	)
 
 	globalKeys = awful.util.table.join(
