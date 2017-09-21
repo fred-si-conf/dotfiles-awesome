@@ -773,7 +773,7 @@
 -- Applications launched at startup
 	if hostname == "burp" then
 		awful.spawn(browser.default.command, {tag = browser.default.tag})
-		awful.spawn(browser.adopte.command, {tag = browser.adopte.tag})
+		--awful.spawn(browser.adopte.command, {tag = browser.adopte.tag})
 		awful.spawn(browser.clean.command, {tag = browser.clean.tag})
 		awful.spawn(browser.vol.command, {tag = browser.vol.tag})
 		awful.spawn(music_player, {tag = "9"})
