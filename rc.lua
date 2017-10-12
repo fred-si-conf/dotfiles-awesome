@@ -772,15 +772,19 @@
 
 -- Applications launched at startup
 	if hostname == "burp" then
-		awful.spawn(browser.default.command, {tag = browser.default.tag})
+		--awful.spawn(browser.default.command, {tag = browser.default.tag})
 		--awful.spawn(browser.adopte.command, {tag = browser.adopte.tag})
+		--awful.spawn(browser.vol.command, {tag = browser.vol.tag})
+		
+		--awful.spawn(torrent_client)
+		awful.spawn(irc_client, { tag = "1" })
 		awful.spawn(browser.clean.command, {tag = browser.clean.tag})
-		awful.spawn(browser.vol.command, {tag = browser.vol.tag})
+		awful.spawn(mail_client)
+
 		awful.spawn(music_player, {tag = "9"})
 		awful.spawn(terminal .. " -e tmux new-session -s admin", {tag = "5"})
-		--awful.spawn(torrent_client)
-		--awful.spawn(irc_client, { tag = "1" })
-		awful.spawn(mail_client)
+
+		
 
 	elseif hostname == "lysa" then
 		awful.spawn('gnome-keyring-daemon --start --foreground --componements=secrets')
