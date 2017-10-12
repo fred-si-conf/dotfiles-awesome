@@ -559,12 +559,12 @@
 				-- minimized, since minimized clients can't have the focus.
 				c.minimized = true
 			end),
-		awful.key({ modkey,           }, "m",
+		awful.key({ modkey, "Shift"   }, "m",
 			function (c)
 				c.maximized_horizontal = not c.maximized_horizontal
 				c.maximized_vertical   = not c.maximized_vertical
 			end),
-		awful.key({ modkey,  "Shift"   }, "m", function (c) c.maximized = not c.maximized end,
+		awful.key({ modkey,           }, "m", function (c) c.maximized = not c.maximized end,
                   { description = "Toggle maximized", group = "client"})
 	)
 
