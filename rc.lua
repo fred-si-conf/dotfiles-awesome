@@ -782,7 +782,7 @@
 		awful.spawn(mail_client)
 
 		awful.spawn(music_player, {tag = "9"})
-		awful.spawn(terminal .. " -e tmux new-session -s admin", {tag = "5"})
+		awful.spawn(terminal .. " -e tmux new-session -s admin", {tag = "8"})
 
 		
 
