@@ -232,19 +232,6 @@
 
 		-- Battery status
 		if hostname == "lysa" then
-			local function battery()
-				local battery_level = io.open("/sys/class/power_supply/BATC/capacity"):read()
-				local charge_status = io.open("/sys/class/power_supply/BATC/status"):read()
-				
-				if charge_status == "Discharging" then
-					charge_status = "V"
-				else
-					charge_status = "^"
-				end
-
-				return charge_status .. " " .. battery_level .. "%"
-			end
-
 			-- Create wibox with batterywidget
 			batterywidget = wibox.widget.progressbar()
 			batbox = wibox.widget {
