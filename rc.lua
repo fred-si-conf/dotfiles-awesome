@@ -366,8 +366,9 @@
 -- Key bindings 
 	awesomeManagingKeys = awful.util.table.join(
 		awful.key({ modkey,           }, "j", hotkeys_popup.show_help, {description="show help", group="awesome"}),
-		awful.key({                   }, "Print", function () io.popen("scrot") end),
-		awful.key({         "Shift"   }, "Print", function () io.popen("scrot -u") end),
+		awful.key({                   }, "Print", function () io.popen("scrot -e 'mv $f ~/Images/screenshots'") end),
+		awful.key({         "Shift"   }, "Print", function () io.popen("scrot -u -e 'mv $f ~/Images/screenshots'") end),
+		awful.key({         "Control" }, "Print", function () io.popen("scrot -s -e 'mv $f ~/Images/screenshots'") end),
 		awful.key({ modkey,           }, "Left",  awful.tag.viewprev       ),
 		awful.key({ modkey,           }, "Right", awful.tag.viewnext       ),
 		awful.key({ modkey, "Control" }, "t", awful.tag.viewprev       ),
@@ -436,49 +437,10 @@
 		awful.key({ modkey, "Mod1", "Shift"}, "w", function () io.popen("systemctl poweroff -i") end),
 
 		-- Internet and web
-		awful.key({ modkey, "Mod1"    }     , "v",
-			function ()
-				awful.spawn(
-					browser.default.command,
-					{
-						tag = browser.default.tag
-					}
-				)
-			end
-		),
-
-		awful.key({ modkey, "Mod1", "Shift"}, "v",
-			function ()
-				awful.spawn(
-					browser.adopte.command,
-					{
-						tag = browser.adopte.tag
-					}
-				)
-			end
-		),
-
-		awful.key({ modkey, "Mod1"    }     , "d",
-			function ()
-				awful.spawn(
-					browser.clean.command,
-					{
-						tag = browser.clean.tag
-					}
-				)
-			end
-		),
-
-		awful.key({ modkey, "Mod1", "Shift"}, "d",
-			function ()
-				awful.spawn(
-					browser.vol.command,
-					{
-						tag = browser.vol.tag
-					}
-				)
-			end
-		),
+		awful.key({ modkey, "Mod1"    }     , "v", function () awful.spawn(browser.default.command) end),
+		awful.key({ modkey, "Mod1", "Shift"}, "v", function () awful.spawn(browser.adopte.command) end),
+		awful.key({ modkey, "Mod1"    }     , "d", function () awful.spawn(browser.clean.command) end),
+		awful.key({ modkey, "Mod1", "Shift"}, "d", function () awful.spawn(browser.vol.command) end),
 
 		awful.key({ modkey, "Mod1"    }     , "m", function () awful.spawn(mail_client) end),
 		awful.key({ modkey, "Mod1"    }     , "i", function () awful.spawn(irc_client, {tag = "1"}) end),
@@ -486,7 +448,7 @@
 		awful.key({ modkey, "Mod1"    }     , "h", function () awful.spawn("filezilla") end),
 
 		-- Multimedia
-		awful.key({ modkey, "Mod1"    }     , "s", function () awful.spawn(music_player, {tag = "9"}) end),
+		awful.key({ modkey, "Mod1"    }     , "s", function () awful.spawn(music_player) end),
 
 		awful.key({ modkey, "Mod1", "Shift"}, "s",
 			function ()
@@ -625,7 +587,9 @@
 			function (c)
 				c.maximized_horizontal = not c.maximized_horizontal
 				c.maximized_vertical   = not c.maximized_vertical
-			end)
+			end),
+		awful.key({ modkey,  "Shift"   }, "m", function (c) c.maximized = not c.maximized end,
+                  { description = "Toggle maximized", group = "client"})
 	)
 
 	globalKeys = awful.util.table.join(
@@ -746,7 +710,13 @@
 		{
 			rule = { class = "Thunderbird" },
 			properties = { screen = 1, tag = "1" }
+		},
+
+		{
+			rule = { class = "mplayer" },
+			properties = { border_width = 0 }
 		}
+			
 	}
 
 -- Signals
@@ -826,8 +796,14 @@
 
 -- Applications launched at startup
 	if hostname == "burp" then
-		awful.spawn(torrent_client)
-	--	awful.spawn(irc_client)
+		awful.spawn(browser.default.command, {tag = browser.default.tag})
+		--awful.spawn(browser.adopte.command, {tag = browser.adopte.tag})
+		awful.spawn(browser.clean.command, {tag = browser.clean.tag})
+		awful.spawn(browser.vol.command, {tag = browser.vol.tag})
+		awful.spawn(music_player, {tag = "9"})
+		awful.spawn(terminal .. " -e tmux new-session -s admin", {tag = "5"})
+		--awful.spawn(torrent_client)
+		--awful.spawn(irc_client, { tag = "1" })
 		awful.spawn(mail_client)
 
 	elseif hostname == "lysa" then
