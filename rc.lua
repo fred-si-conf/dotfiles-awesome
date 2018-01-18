@@ -8,6 +8,7 @@
 
 	-- Widget and layout library
 		local wibox = require("wibox")
+		local vicious = require("vicious")
 
 	-- Theme handling library
 		local beautiful = require("beautiful")
@@ -16,6 +17,7 @@
 		local naughty = require("naughty")
 		local menubar = require("menubar")
 		local hotkeys_popup = require("awful.hotkeys_popup").widget
+	
 
 -- Error handling
 	-- Check if awesome encountered an error during startup and fell back to
@@ -43,7 +45,6 @@
 
 -- Variables definitions
 	hostname = io.open('/etc/hostname'):read()
-	--config_directory = os.getenv('HOME') .. '/.config/awesome/'
 	config_directory = awful.util.getdir("config")
 
 	-- Themes define colours, icons, font and wallpapers.
@@ -106,6 +107,7 @@
 
 	-- Table of layouts to cover with awful.layout.inc, order matters.
 	if hostname == "lysa" then
+	--config_directory = os.getenv('HOME') .. '/.config/awesome/'
 		 awful.layout.layouts = {
 			awful.layout.suit.max,
 			awful.layout.suit.spiral.dwindle,
@@ -228,21 +230,54 @@
 	-- Keyboard map indicator and switcher
 		mykeyboardlayout = awful.widget.keyboardlayout()
 
-	-- Battery status
-		--if hostname == "lysa" then
-			--local bashets = require("bashets")
+		-- Battery status
+		if hostname == "lysa" then
+			local function battery()
+				local battery_level = io.open("/sys/class/power_supply/BATC/capacity"):read()
+				local charge_status = io.open("/sys/class/power_supply/BATC/status"):read()
+				
+				if charge_status == "Discharging" then
+					charge_status = "V"
+				else
+					charge_status = "^"
+				end
 
-			--batterystatus = wibox.widget.textbox()
-			--bashets.register( config_directory .. "battery.sh",
-							--{ widget = batterystatus,
-							  --separator = '|',
-							  --format = "$1 $2",
-							  --update_time = 60 
-							--})
-			--bashets.start()
+				return charge_status .. " " .. battery_level .. "%"
+			end
 
-			--right_layout:add(batterystatus)
-		--end
+			-- Create wibox with batterywidget
+			batterywidget = wibox.widget.progressbar()
+			batbox = wibox.widget {
+				{
+					max_value     = 1,
+					widget        = batterywidget,
+					forced_width  = 30,
+					direction     = 'east',
+					color         = {
+						type = "linear",
+						from = { 0, 0 },
+						to = { 0, 30 },
+						stops = {
+							{ 0, "#AECF96" },
+							{ 1, "#FF5656" }
+						}
+					}
+				},
+				{
+					text = 'battery',
+					widget = wibox.widget.textbox
+				},
+
+				color = beautiful.fg_widget,
+				layout = wibox.layout.stack,
+			}
+
+			batbox = wibox.layout.margin(batbox, 1, 1, 4, 4)
+
+			-- Register battery widget
+			vicious.register(batterywidget, vicious.widgets.bat, "$2", 61, "BATC")
+			
+		end
 
 	-- Create a wibox for each screen and add it
 		local taglist_buttons = awful.util.table.join(
@@ -326,6 +361,7 @@
 					{ -- Right widgets
 						layout = wibox.layout.fixed.horizontal,
 						mykeyboardlayout,
+						batbox,
 						wibox.widget.systray(),
 						mytextclock,
 						s.mylayoutbox,
