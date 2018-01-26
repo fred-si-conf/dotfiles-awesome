@@ -53,6 +53,7 @@
 
 	editor = "vim"
 	editor_cmd = terminal .. " -e " .. editor
+	calculator = "calculator"
 
 	file_manager = "xfe"
 	alternative_file_manager = "nautilus"
@@ -341,10 +342,32 @@
 
 -- Key bindings 
 	awesomeManagingKeys = awful.util.table.join(
-		awful.key({ modkey,           }, "j", hotkeys_popup.show_help, {description="show help", group="awesome"}),
-		awful.key({                   }, "Print", function () io.popen("scrot -e 'mv $f ~/Images/screenshots'") end),
-		awful.key({         "Shift"   }, "Print", function () io.popen("scrot -u -e 'mv $f ~/Images/screenshots'") end),
-		awful.key({         "Control" }, "Print", function () io.popen("scrot -s -e 'mv $f ~/Images/screenshots'") end),
+		awful.key({ modkey,           }, "j",
+			hotkeys_popup.show_help,
+			{
+				description="show help",
+				group="awesome"
+			}),
+
+		awful.key({                   }, "Print",
+			function () io.popen("scrot -e 'mv $f ~/Images/screenshots'") end,
+			{
+				description="Take screenshot of active window",
+				group="applications"
+			}),
+		awful.key({         "Shift"   }, "Print",
+			function () io.popen("scrot -u -e 'mv $f ~/Images/screenshots'") end,
+			{
+				description="Take screenshot of active window",
+				group="applications"
+			}),
+		awful.key({         "Control" }, "Print",
+			function () io.popen("scrot -s -e 'mv $f ~/Images/screenshots'") end,
+			{
+				description="Take screenshot of interactive selection with the mouse",
+				group="applications"
+			}),
+
 		awful.key({ modkey,           }, "Left",  awful.tag.viewprev       ),
 		awful.key({ modkey,           }, "Right", awful.tag.viewnext       ),
 		awful.key({ modkey, "Control" }, "t", awful.tag.viewprev       ),
