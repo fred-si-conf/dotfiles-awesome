@@ -368,6 +368,13 @@
 				group="applications"
 			}),
 
+		awful.key({                   }, "XF86Calculator",
+			function() awful.spawn(calculator, {floating = true}) end,
+			{
+				description="open the calculator application",
+				group="applications"
+			}),
+		
 		awful.key({ modkey,           }, "Left",  awful.tag.viewprev       ),
 		awful.key({ modkey,           }, "Right", awful.tag.viewnext       ),
 		awful.key({ modkey, "Control" }, "t", awful.tag.viewprev       ),
