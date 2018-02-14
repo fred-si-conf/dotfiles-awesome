@@ -258,7 +258,7 @@
 				layout = wibox.layout.stack,
 			}
 
-			batbox = wibox.layout.margin(batbox, 4, 4, 4, 4)
+			batbox = wibox.container.margin(batbox, 4, 4, 4, 4)
 
 			-- Register battery widget
 			vicious.register(batterywidget, vicious.widgets.bat, "$2", 120, "BATC")
