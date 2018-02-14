@@ -475,8 +475,26 @@
 			)
 
 		elseif hostname == "lysa" then
+			local function brightness(target)
+				if target == 'max' then
+					io.popen("xbacklight -set 100")
+				elseif target == 'off' then
+					io.popen("xbacklight -set 0")
+				elseif target == 'up' then
+					io.popen("xbacklight -inc 10")
+				elseif target == 'down' then
+					io.popen("xbacklight -dec 10")
+				end
+			end
+
 			hostSpecificKeys = awful.util.table.join( 
-			awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end)
+				awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end),
+
+				awful.key({} ,"XF86BrightnessDown", function () brightness('down') end),
+				awful.key({} ,"XF86BrightnessUp", function () brightness('up') end),
+
+				awful.key({modkey} ,"XF86BrightnessDown", function () brightness('off') end),
+				awful.key({modkey} ,"XF86BrightnessUp", function () brightness('max') end)
 			)
 
 		end
@@ -514,54 +532,42 @@
 
 		elseif hostname == "lysa" then
 			local touchpad = {}
-					touchpad.get_state = function()
-						local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
-						local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
+				touchpad.get_state = function()
+					local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
+					local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
 
-						return touchpad_state
-					end
+					return touchpad_state
+				end
 
-					touchpad.switch_off = function()
-						io.popen("synclient TouchpadOff=1")
-						mouse.coords({x=0, y=0})
-					end
+				touchpad.switch_off = function()
+					io.popen("synclient TouchpadOff=1")
+					mouse.coords({x=0, y=0})
+				end
 
-					touchpad.switch_on = function()
-						io.popen("synclient TouchpadOff=0")
-					end
+				touchpad.switch_on = function()
+					io.popen("synclient TouchpadOff=0")
+				end
 
-					touchpad.toggle_state = function()
-						if touchpad.get_state() == "0" then
-							touchpad.switch_off()
-						else
-							touchpad.switch_on()
-						end
-					end
-
-				local function brightness(target)
-					if target == 'max' then
-						io.popen("xbacklight -set 100")
-					elseif target == 'off' then
-						io.popen("xbacklight -set 0")
-					elseif target == 'up' then
-						io.popen("xbacklight -inc 10")
-					elseif target == 'down' then
-						io.popen("xbacklight -dec 10")
+				touchpad.toggle_state = function()
+					if touchpad.get_state() == "0" then
+						touchpad.switch_off()
+					else
+						touchpad.switch_on()
 					end
 				end
 							
-				multimediaKeys = awful.util.table.join(
-					awful.key({} ,"XF86AudioMute", function () touchpad.toggle_state() end),
+			multimediaKeys = awful.util.table.join(
+				awful.key({} ,"XF86AudioMute", function () touchpad.toggle_state() end),
 
-					awful.key({} ,"XF86AudioLowerVolume", function () brightness('down') end),
-					awful.key({} ,"XF86AudioRaiseVolume", function () brightness('up') end),
+				awful.key({} ,"XF86AudioLowerVolume", function () end),
+				awful.key({} ,"XF86AudioRaiseVolume", function () end),
 
-					awful.key({modkey} ,"XF86AudioLowerVolume", function () brightness('off') end),
-					awful.key({modkey} ,"XF86AudioRaiseVolume", function () brightness('max') end)
-				)
+				awful.key({modkey} ,"XF86AudioLowerVolume", function () end),
+				awful.key({modkey} ,"XF86AudioRaiseVolume", function () end)
+			)
 
-				touchpad.switch_off()
-			end
+			touchpad.switch_off()
+		end
 
 	clientbuttons = awful.util.table.join(
 		awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
