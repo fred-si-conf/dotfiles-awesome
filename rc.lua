@@ -517,8 +517,34 @@
 				end
 			end
 
+			local touchpad = {}
+				touchpad.get_state = function()
+					local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
+					local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
+
+					return touchpad_state
+				end
+
+				touchpad.switch_off = function()
+					io.popen("synclient TouchpadOff=1")
+					mouse.coords({x=0, y=0})
+				end
+
+				touchpad.switch_on = function()
+					io.popen("synclient TouchpadOff=0")
+				end
+
+				touchpad.toggle_state = function()
+					if touchpad.get_state() == "0" then
+						touchpad.switch_off()
+					else
+						touchpad.switch_on()
+					end
+				end
+							
 			hostSpecificKeys = awful.util.table.join( 
 				awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end),
+				awful.key({} ,"XF86TouchpadToggle", function () touchpad.toggle_state() end),
 
 				awful.key({} ,"XF86MonBrightnessDown", function () brightness('down') end),
 				awful.key({} ,"XF86MonBrightnessUp", function () brightness('up') end),
@@ -527,6 +553,7 @@
 				awful.key({modkey} ,"XF86MonBrightnessUp", function () brightness('max') end)
 			)
 
+			touchpad.switch_off()
 		end
 
 	-- Multimedia keys
@@ -561,33 +588,8 @@
 			)
 
 		elseif hostname == "lysa" then
-			local touchpad = {}
-				touchpad.get_state = function()
-					local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
-					local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
-
-					return touchpad_state
-				end
-
-				touchpad.switch_off = function()
-					io.popen("synclient TouchpadOff=1")
-					mouse.coords({x=0, y=0})
-				end
-
-				touchpad.switch_on = function()
-					io.popen("synclient TouchpadOff=0")
-				end
-
-				touchpad.toggle_state = function()
-					if touchpad.get_state() == "0" then
-						touchpad.switch_off()
-					else
-						touchpad.switch_on()
-					end
-				end
-							
 			multimediaKeys = awful.util.table.join(
-				awful.key({} ,"XF86AudioMute", function () touchpad.toggle_state() end),
+				awful.key({} ,"XF86AudioMute", function () end),
 
 				awful.key({} ,"XF86AudioLowerVolume", function () end),
 				awful.key({} ,"XF86AudioRaiseVolume", function () end),
@@ -595,8 +597,6 @@
 				awful.key({modkey} ,"XF86AudioLowerVolume", function () end),
 				awful.key({modkey} ,"XF86AudioRaiseVolume", function () end)
 			)
-
-			touchpad.switch_off()
 		end
 
 	clientbuttons = awful.util.table.join(
