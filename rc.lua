@@ -490,11 +490,11 @@
 			hostSpecificKeys = awful.util.table.join( 
 				awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end),
 
-				awful.key({} ,"XF86BrightnessDown", function () brightness('down') end),
-				awful.key({} ,"XF86BrightnessUp", function () brightness('up') end),
+				awful.key({} ,"XF86MonBrightnessDown", function () brightness('down') end),
+				awful.key({} ,"XF86MonBrightnessUp", function () brightness('up') end),
 
-				awful.key({modkey} ,"XF86BrightnessDown", function () brightness('off') end),
-				awful.key({modkey} ,"XF86BrightnessUp", function () brightness('max') end)
+				awful.key({modkey} ,"XF86MonBrightnessDown", function () brightness('off') end),
+				awful.key({modkey} ,"XF86MonBrightnessUp", function () brightness('max') end)
 			)
 
 		end
