@@ -8,6 +8,7 @@
 
 	-- Widget and layout library
 		local wibox = require("wibox")
+		local vicious = require("vicious")
 
 	-- Theme handling library
 		local beautiful = require("beautiful")
@@ -16,6 +17,7 @@
 		local naughty = require("naughty")
 		local menubar = require("menubar")
 		local hotkeys_popup = require("awful.hotkeys_popup").widget
+	
 
 -- Error handling
 	-- Check if awesome encountered an error during startup and fell back to
@@ -43,7 +45,7 @@
 
 -- Variables definitions
 	hostname = io.open('/etc/hostname'):read()
-	config_directory = os.getenv('HOME') .. '/.config/awesome/'
+	config_directory = awful.util.getdir("config")
 
 	-- Themes define colours, icons, font and wallpapers.
 	beautiful.init(config_directory .. "themes/mytheme/theme.lua")
@@ -105,6 +107,7 @@
 
 	-- Table of layouts to cover with awful.layout.inc, order matters.
 	if hostname == "lysa" then
+	--config_directory = os.getenv('HOME') .. '/.config/awesome/'
 		 awful.layout.layouts = {
 			awful.layout.suit.max,
 			awful.layout.suit.spiral.dwindle,
@@ -227,21 +230,41 @@
 	-- Keyboard map indicator and switcher
 		mykeyboardlayout = awful.widget.keyboardlayout()
 
-	-- Battery status
-		--if hostname == "lysa" then
-			--local bashets = require("bashets")
+		-- Battery status
+		if hostname == "lysa" then
+			-- Create wibox with batterywidget
+			batterywidget = wibox.widget.progressbar()
+			batbox = wibox.widget {
+				{
+					max_value     = 1,
+					widget        = batterywidget,
+					forced_width  = 30,
+					direction     = 'east',
+					color         = {
+						type = "linear",
+						from = { 0, 0 },
+						to = { 0, 30 },
+						stops = {
+							{ 0, "#AECF96" },
+							{ 1, "#FF5656" }
+						}
+					}
+				},
+				{
+					text = 'battery',
+					widget = wibox.widget.textbox
+				},
 
-			--batterystatus = wibox.widget.textbox()
-			--bashets.register( config_directory .. "battery.sh",
-							--{ widget = batterystatus,
-							  --separator = '|',
-							  --format = "$1 $2",
-							  --update_time = 60 
-							--})
-			--bashets.start()
+				color = beautiful.fg_widget,
+				layout = wibox.layout.stack,
+			}
 
-			--right_layout:add(batterystatus)
-		--end
+			batbox = wibox.container.margin(batbox, 4, 4, 4, 4)
+
+			-- Register battery widget
+			vicious.register(batterywidget, vicious.widgets.bat, "$2", 120, "BATC")
+			
+		end
 
 	-- Create a wibox for each screen and add it
 		local taglist_buttons = awful.util.table.join(
@@ -325,6 +348,7 @@
 					{ -- Right widgets
 						layout = wibox.layout.fixed.horizontal,
 						mykeyboardlayout,
+						batbox,
 						wibox.widget.systray(),
 						mytextclock,
 						s.mylayoutbox,
@@ -481,10 +505,55 @@
 			)
 
 		elseif hostname == "lysa" then
+			local function brightness(target)
+				if target == 'max' then
+					io.popen("xbacklight -set 100")
+				elseif target == 'off' then
+					io.popen("xbacklight -set 0")
+				elseif target == 'up' then
+					io.popen("xbacklight -inc 10")
+				elseif target == 'down' then
+					io.popen("xbacklight -dec 10")
+				end
+			end
+
+			local touchpad = {}
+				touchpad.get_state = function()
+					local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
+					local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
+
+					return touchpad_state
+				end
+
+				touchpad.switch_off = function()
+					io.popen("synclient TouchpadOff=1")
+					mouse.coords({x=0, y=0})
+				end
+
+				touchpad.switch_on = function()
+					io.popen("synclient TouchpadOff=0")
+				end
+
+				touchpad.toggle_state = function()
+					if touchpad.get_state() == "0" then
+						touchpad.switch_off()
+					else
+						touchpad.switch_on()
+					end
+				end
+							
 			hostSpecificKeys = awful.util.table.join( 
-			awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end)
+				awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end),
+				awful.key({} ,"XF86TouchpadToggle", function () touchpad.toggle_state() end),
+
+				awful.key({} ,"XF86MonBrightnessDown", function () brightness('down') end),
+				awful.key({} ,"XF86MonBrightnessUp", function () brightness('up') end),
+
+				awful.key({modkey} ,"XF86MonBrightnessDown", function () brightness('off') end),
+				awful.key({modkey} ,"XF86MonBrightnessUp", function () brightness('max') end)
 			)
 
+			touchpad.switch_off()
 		end
 
 	-- Multimedia keys
@@ -519,55 +588,16 @@
 			)
 
 		elseif hostname == "lysa" then
-			local touchpad = {}
-					touchpad.get_state = function()
-						local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
-						local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
+			multimediaKeys = awful.util.table.join(
+				awful.key({} ,"XF86AudioMute", function () end),
 
-						return touchpad_state
-					end
+				awful.key({} ,"XF86AudioLowerVolume", function () end),
+				awful.key({} ,"XF86AudioRaiseVolume", function () end),
 
-					touchpad.switch_off = function()
-						io.popen("synclient TouchpadOff=1")
-						mouse.coords({x=0, y=0})
-					end
-
-					touchpad.switch_on = function()
-						io.popen("synclient TouchpadOff=0")
-					end
-
-					touchpad.toggle_state = function()
-						if touchpad.get_state() == "0" then
-							touchpad.switch_off()
-						else
-							touchpad.switch_on()
-						end
-					end
-
-				local function brightness(target)
-					if target == 'max' then
-						io.popen("xbacklight -set 100")
-					elseif target == 'off' then
-						io.popen("xbacklight -set 0")
-					elseif target == 'up' then
-						io.popen("xbacklight -inc 10")
-					elseif target == 'down' then
-						io.popen("xbacklight -dec 10")
-					end
-				end
-							
-				multimediaKeys = awful.util.table.join(
-					awful.key({} ,"XF86AudioMute", function () touchpad.toggle_state() end),
-
-					awful.key({} ,"XF86AudioLowerVolume", function () brightness('down') end),
-					awful.key({} ,"XF86AudioRaiseVolume", function () brightness('up') end),
-
-					awful.key({modkey} ,"XF86AudioLowerVolume", function () brightness('off') end),
-					awful.key({modkey} ,"XF86AudioRaiseVolume", function () brightness('max') end)
-				)
-
-				touchpad.switch_off()
-			end
+				awful.key({modkey} ,"XF86AudioLowerVolume", function () end),
+				awful.key({modkey} ,"XF86AudioRaiseVolume", function () end)
+			)
+		end
 
 	clientbuttons = awful.util.table.join(
 		awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
