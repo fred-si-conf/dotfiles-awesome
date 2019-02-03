@@ -62,7 +62,7 @@ terminal = "urxvtc"
 
 editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
-calculator = "calculator"
+calculator = "xcalc"
 
 file_manager = "xfe"
 alternative_file_manager = "nautilus"
@@ -90,11 +90,11 @@ browser = {default = {command = "firefox -p default",
                     tag = "9"}}
 
 mail_client = "thunderbird"
-irc_client = terminal .. " -e tmux new-session -s irc weechat" 
+irc_client = terminal .. " -e tmux new-session -AD -s irc weechat" 
 
 if hostname == "burp" then
     suspend = i3lock_command .. ' && systemctl suspend -i'
-    music_player = terminal .. " -e tmux new-session -s cmus cmus"
+    music_player = terminal .. " -e tmux new-session -AD -s cmus cmus"
     torrent_client = "qbittorrent"
 end
 
@@ -854,7 +854,7 @@ if hostname == "burp" then
     awful.spawn(mail_client)
 
     awful.spawn(music_player, {tag = "9"})
-    awful.spawn(terminal .. " -e tmux new-session -s admin", {tag = "8"})
+    awful.spawn(terminal .. " -e tmux new-session -AD -s admin", {tag = "8"})
 
     
 
