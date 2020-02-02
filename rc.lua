@@ -764,7 +764,6 @@ awful.rules.rules = {
         rule = { class = "mplayer" },
         properties = { border_width = 0 }
     }
-        
 }
 
 ------------------------------------------------------------------------------
