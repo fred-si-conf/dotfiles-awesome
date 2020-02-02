@@ -302,8 +302,7 @@ awful.screen.connect_for_each_screen(
         -- Each screen has its own tag table.
         awful.tag({ "1", "2", "3", "4", "5", "6", "7"}, s, awful.layout.layouts[1])
         awful.tag.new({"8", "9"}, s, awful.layout.suit.max)
-        s.tags[1]:view_only() -- Sans cette ligne awesome démarre avec le focus
-                              -- les tags 1 et 8.
+        s.tags[8]:view_only() -- focus le tag 8 au démarrage
 
         -- Create a promptbox for each screen
         s.mypromptbox = awful.widget.prompt()
