@@ -233,6 +233,17 @@ cpuwidget:set_color{type = "linear", from = {0, 0}, to = {50, 0},
                     stops = {{0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96"}}}
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 1)
 
+cmus_widget = wibox.widget.textbox()
+vicious.register(cmus_widget, cmus,
+    function (widget, args)
+        if args["{status}"] == "Stopped" then
+            return " - "
+        else
+            return args["{status}"]..': '.. args["{artist}"]..' - '.. args["{title}"]
+        end
+    end, 1)
+
+
 -- Create a wibox for each screen and add it
 local taglist_buttons, tasklist_buttons, buttons
 buttons = {one = awful.button({}, 1, function(t) t:view_only() end),
