@@ -651,7 +651,7 @@ globalKeys = gears.table.join(
     awesomeManagingKeys,
     applicationLaunchingKeys,
     hostSpecificKeys,
-    multimediaKeys
+    multimediaKeys,
     capslock.key
 )
 
