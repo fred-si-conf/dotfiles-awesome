@@ -17,8 +17,9 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
-    
+
 local utils = require("plugins.utils")
+local capslock = require("plugins.capslock")
 
 ------------------------------------------------------------------------------
 -- Error handling
@@ -339,6 +340,7 @@ awful.screen.connect_for_each_screen(
                 s.mytasklist, -- Middle widget
                 { -- Right widgets
                     layout = wibox.layout.fixed.horizontal,
+                    capslock,
                     mykeyboardlayout,
                     batbox,
                     wibox.widget.systray(),
@@ -643,6 +645,7 @@ globalKeys = gears.table.join(
     applicationLaunchingKeys,
     hostSpecificKeys,
     multimediaKeys
+    capslock.key
 )
 
 -- Bind all key numbers to tags.
