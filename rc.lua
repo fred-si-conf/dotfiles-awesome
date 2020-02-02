@@ -745,6 +745,7 @@ awful.rules.rules = {
 
             name = {
               "Event Tester",  -- xev.
+              "gnome-calculator",  -- xev.
             },
 
             role = {
