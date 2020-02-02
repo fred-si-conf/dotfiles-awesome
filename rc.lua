@@ -66,8 +66,15 @@ editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
 calculator = "gnome-calculator"
 
-file_manager = "xfe"
-alternative_file_manager = "nautilus"
+if hostname == "burp" then
+    file_manager = "nautilus"
+    alternative_file_manager = "nautilus"
+
+elseif hostname == "lysa" then
+    file_manager = "xfe"
+    alternative_file_manager = "nautilus"
+
+end
 
 lock_image = os.getenv("HOME") .. "/Images/wallpapers/lock.png"
 lock_color = "605050"
