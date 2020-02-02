@@ -1,8 +1,10 @@
 -- This is not a widget even though it is needed by some widgets
 -- It is a collection of small utilities to reuse in widgets
 
---reads a file using the specified mode
-function readfile(path, mode)
+local utils = {}
+-- Pour plus de détails sur les modes:
+-- https://www.lua.org/manual/5.3/manual.html#pdf-file:read
+function utils.read_file(path, mode)
 	local f, ret
 
 	f = assert(io.open(path, "r"))
@@ -13,15 +15,14 @@ function readfile(path, mode)
 end
 
 -- clear a naugthy notify using its name
-function clearinfo(infoname)
+function utils.clear_info(infoname)
 	if infoname ~= nil then
 		naughty.destroy(infoname)
 		infoname = nil
 	end
 end
 
--- gets the hostname
-function gethostname()
+function utils.get_hostname()
 	local hostname
 
 	hostname = os.getenv("HOST")
@@ -34,8 +35,7 @@ function gethostname()
 	return hostname
 end
 
--- gets the username
-function getusername()
+function utils.get_username()
 	local username
 
 	username = os.getenv("USER")
@@ -47,21 +47,18 @@ function getusername()
 end
 
 -- speak a text (require festival to be installed)
-function speak(text)
+function utils.speak_text(text)
 	assert(io.popen("echo " .. text .. " | festival --tts"))
 end
 
--- get number of cpu cores of the machine and return it
-function getnbcore()
-	local ret, line
-	local tmp = 0
+function utils.get_number_of_cpu_core()
+	local core_id, line
 
 	for line in io.lines("/proc/cpuinfo") do
-		tmp= string.match(line, "processor%s:\ +(%d+)")
-		if tmp then
-			ret = tmp
-		end
+		core_id = string.match(line, "processor%s+:%s+(%d+)")
 	end
 
-	return ret + 1
+	return core_id + 1
 end
+
+return utils
