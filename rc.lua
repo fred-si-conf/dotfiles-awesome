@@ -390,8 +390,8 @@ awesomeManagingKeys = gears.table.join(
             description="Take screenshot of active window",
             group="applications"
         }),
-    awful.key({         "Control" }, "Print",
-        function () io.popen("scrot -s -e 'mv $f ~/Images/screenshots'") end,
+    awful.key({         "Control" }, "Print", nil,
+        function () awful.spawn("scrot -s -e 'mv $f ~/Images/screenshots'") end,
         {
             description="Take screenshot of interactive selection with the mouse",
             group="applications"
