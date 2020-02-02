@@ -197,7 +197,7 @@ menubar.utils.terminal = terminal
 -- Widgets
 ------------------------------------------------------------------------------
 os.setlocale("fr_FR.UTF-8")
-mytextclock = awful.widget.textclock(" %a %d %b  %H:%M:%S ", 1)
+mytextclock = wibox.widget.textclock(" %a %d %b  %H:%M:%S ", 1)
 mykeyboardlayout = awful.widget.keyboardlayout()
 
 if hostname == "lysa" then
