@@ -1,6 +1,0 @@
-[submodule "nifty"]
-	path = nifty
-	url = https://github.com/thekrampus/awesome-nifty
-[submodule "jammin"]
-	path = jammin
-	url = https://github.com/thekrampus/awesome-jammin
