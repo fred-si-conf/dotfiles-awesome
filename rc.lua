@@ -154,34 +154,6 @@ local function launch_in_shell(appName)
     awful.spawn(terminal .. " -e " .. appName)
 end
 
-local function test_propertie() 
-    -- Fonction écrite dans le but de faire des tests pour déterminer comment
-    -- utilisé les propriétés des clients.
-    c = client.get()
-    local c_type = ''
-    for i, j in pairs(c) do
-        c_type =  c_type .. i .. ' : ' .. type(j) .. '\n'
-    end
-
-    naughty.notify({ 
-                    timeout = 60,
-                    title = "awful.client",
-                    --text = c
-                    --text = tostring(c)
-                    text = c_type
-    })
-    naughty.notify({ 
-                    timeout = 60,
-                    title = "awful.client",
-                    text = type(awful.client.property.get(c[1], 'fx'))
-    })
-    naughty.notify({ 
-                    timeout = 60,
-                    title = "awful.client",
-                    text = type(c)
-    })
-end
-
 local function set_wallpaper(s)
     if beautiful.wallpaper then
         local wallpaper = beautiful.wallpaper
