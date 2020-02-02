@@ -18,6 +18,7 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
     
+local utils = require("plugins.utils")
 
 ------------------------------------------------------------------------------
 -- Error handling
@@ -51,7 +52,7 @@ end
 ------------------------------------------------------------------------------
 modkey = "Mod4"
 
-hostname = io.open('/etc/hostname'):read()
+hostname = utils.get_hostname()
 config_directory = awful.util.getdir("config")
 
 -- Themes define colours, icons, font and wallpapers.
