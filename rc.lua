@@ -64,7 +64,7 @@ terminal = "urxvtc"
 
 editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
-calculator = "xcalc"
+calculator = "gnome-calculator"
 
 file_manager = "xfe"
 alternative_file_manager = "nautilus"
