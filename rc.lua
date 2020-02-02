@@ -20,6 +20,9 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 
 local utils = require("plugins.utils")
 local capslock = require("plugins.capslock")
+local cmus = require("plugins.cmus")
+
+local charcodes_popup = require("plugins.charcodes")
 
 ------------------------------------------------------------------------------
 -- Error handling
@@ -340,7 +343,9 @@ awful.screen.connect_for_each_screen(
                     layout = wibox.layout.fixed.horizontal,
                     capslock,
                     mykeyboardlayout,
+                    cpuwidget,
                     batbox,
+                    cmus_widget,
                     wibox.widget.systray(),
                     mytextclock,
                     s.mylayoutbox,
@@ -362,6 +367,10 @@ root.buttons(gears.table.join(
 -- Key bindings 
 ------------------------------------------------------------------------------
 awesomeManagingKeys = gears.table.join(
+    awful.key({ modkey, }, "o", function () charcodes_popup.show() end,
+                                function () charcodes_popup.hidde() end,
+                                {description="Affiche un popup ASCII",
+                                 group="awesome"}),
     awful.key({ modkey,           }, "j",
         hotkeys_popup.show_help,
         {
