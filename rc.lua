@@ -192,13 +192,12 @@ mylauncher = awful.widget.launcher({image = beautiful.awesome_icon,
 -- Set the terminal for applications that require it
 menubar.utils.terminal = terminal
 
+
 ------------------------------------------------------------------------------
 -- Widgets
 ------------------------------------------------------------------------------
 os.setlocale("fr_FR.UTF-8")
 mytextclock = awful.widget.textclock(" %a %d %b  %H:%M:%S ", 1)
-
--- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
 
 if hostname == "lysa" then
@@ -212,15 +211,18 @@ if hostname == "lysa" then
                                              from = {0, 0},
                                              to = {0, 30},
                                              stops = {{0, "#AECF96"},
-                                                      {1, "#FF5656"}}}},
+                                                      {1, "#FF5656"}
+                                                     }
+                                            }
+                           },
                            {text = 'battery',
-                            widget = wibox.widget.textbox}, 
+                            widget = wibox.widget.textbox
+                           },
                            color = beautiful.fg_widget,
-                           layout = wibox.layout.stack}
+                           layout = wibox.layout.stack
+                          }
 
     batbox = wibox.container.margin(batbox, 4, 4, 4, 4)
-
-    -- Register battery widget
     vicious.register(batterywidget, vicious.widgets.bat, "$2", 120, "BATC")
 end
 
