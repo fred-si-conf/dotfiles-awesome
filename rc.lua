@@ -610,17 +610,7 @@ clientbuttons = gears.table.join(
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize)
 )
---------------------------------------------------------------------------------------------------
--- voir si j'arrive à faire un truc pas trop dégueux du genre
--- keys = {{help = {description = '', group = ''},
---          modifiers = {modkey,},
---          key = 't',
---          on_press = function () print('dis camion) end,
---          on_release = function () print('pouet, pouet') end},
---         {autre touche}}
---
--- for k in keys do
---     awful.key(k.modifiers, k.key, k.on_press, k.on_release, k.help)
+
 clientkeys = gears.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end,
               { description = "Toggle fullscreen", group = "client"}),
