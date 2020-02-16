@@ -201,7 +201,6 @@ menubar.utils.terminal = terminal
 ------------------------------------------------------------------------------
 os.setlocale("fr_FR.UTF-8")
 mytextclock = wibox.widget.textclock(" %a %d %b  %H:%M:%S ", 1)
-mykeyboardlayout = awful.widget.keyboardlayout()
 
 if hostname == "lysa" then
     -- Create wibox with batterywidget
@@ -342,7 +341,6 @@ awful.screen.connect_for_each_screen(
                 { -- Right widgets
                     layout = wibox.layout.fixed.horizontal,
                     capslock,
-                    mykeyboardlayout,
                     cpuwidget,
                     batbox,
                     cmus_widget,
