@@ -49,7 +49,7 @@ local capslock = wibox.widget {
   valign = "center",
 }
 
-capslock.activated = '<span background="red"><b>CAPS LOCK</b></span>'
+capslock.activated = ' <span background="red"><b>CAPS LOCK</b></span> '
 capslock.deactivated = ''
 
 local tooltip = awful.tooltip({})
