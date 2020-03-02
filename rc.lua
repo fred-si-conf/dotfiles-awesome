@@ -194,6 +194,11 @@ menubar.utils.terminal = terminal
 -- Widgets
 ------------------------------------------------------------------------------
 os.setlocale("fr_FR.UTF-8")
+my_spacer = wibox.widget {
+    widget = wibox.widget.textbox,
+    text = ' ',
+}
+
 mytextclock = wibox.widget.textclock(" %a %d %b  %H:%M:%S ", 1)
 
 if hostname == "lysa" then
@@ -350,10 +355,19 @@ awful.screen.connect_for_each_screen(
                 { -- Right widgets
                     layout = wibox.layout.fixed.horizontal,
                     capslock,
+                    my_spacer,
+
                     cpu_widget,
+                    my_spacer,
+
                     mem_widget,
+                    my_spacer,
+
                     batbox,
+
                     cmus_widget,
+                    my_spacer,
+
                     wibox.widget.systray(),
                     mytextclock,
                     s.mylayoutbox,
