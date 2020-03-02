@@ -10,7 +10,7 @@ local theme = {}
 
 theme.font		      = "sans 8"
 
-theme.bg_normal		 = "#222222"
+theme.bg_normal		 = "#111111"
 theme.bg_focus		  = "#535d6c"
 theme.bg_urgent		 = "#ff0000"
 theme.bg_minimize	 = "#444444"
@@ -52,7 +52,11 @@ theme.menu_width	= 100
 -- You can add as many variables as
 -- you wish and access them by using
 -- beautiful.variable in your rc.lua
---theme.bg_widget = "#cc0000"
+theme.wibar_border_width = 0
+theme.wibar_border_color = "#000000"
+
+theme.tasklist_spacing = 3
+theme.tasklist_bg_normal = "#333333"
 
 -- Define the image to load
 theme.titlebar_close_button_normal = themes_dir .. "titlebar/close_normal.png"
