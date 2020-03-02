@@ -235,6 +235,21 @@ cpuwidget:set_color{type = "linear", from = {0, 0}, to = {50, 0},
                     stops = {{0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96"}}}
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 1)
 
+mem_bar = wibox.widget.progressbar()
+mem_widget = wibox.widget {
+                           {
+                            max_value = 1,
+                            widget    = mem_bar,
+                            color     = "red",
+                            background_color = "#494B4F",
+                           },
+
+                           forced_width = 7,
+                           direction = 'east',
+                           layout = wibox.container.rotate,
+                          }
+vicious.register(mem_bar, vicious.widgets.mem, "$1", 2)
+
 cmus_widget = wibox.widget.textbox()
 vicious.register(cmus_widget, cmus,
     function (widget, args)
@@ -342,6 +357,7 @@ awful.screen.connect_for_each_screen(
                     layout = wibox.layout.fixed.horizontal,
                     capslock,
                     cpuwidget,
+                    mem_widget,
                     batbox,
                     cmus_widget,
                     wibox.widget.systray(),
