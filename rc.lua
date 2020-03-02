@@ -228,12 +228,13 @@ if hostname == "lysa" then
     vicious.register(batterywidget, vicious.widgets.bat, "$2", 120, "BATC")
 end
 
-cpuwidget = wibox.widget.graph()
-cpuwidget:set_width(30)
-cpuwidget:set_background_color"#494B4F"
-cpuwidget:set_color{type = "linear", from = {0, 0}, to = {50, 0},
-                    stops = {{0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96"}}}
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 1)
+cpu_widget = wibox.widget.graph()
+cpu_widget:set_width(25)
+cpu_widget:set_background_color("#494B4F")
+cpu_widget:set_color{type = "linear", from = {0, 0}, to = {0, 20},
+                    stops = {{0, "red"}, {0.5, "yellow"}, {1, "green"}}}
+vicious.register(cpu_widget, vicious.widgets.cpu, "$1", 1)
+
 
 mem_bar = wibox.widget.progressbar()
 mem_widget = wibox.widget {
@@ -356,7 +357,7 @@ awful.screen.connect_for_each_screen(
                 { -- Right widgets
                     layout = wibox.layout.fixed.horizontal,
                     capslock,
-                    cpuwidget,
+                    cpu_widget,
                     mem_widget,
                     batbox,
                     cmus_widget,
