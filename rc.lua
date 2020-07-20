@@ -89,7 +89,6 @@ autolock = "xautolock -time 30 -locker '" .. i3lock_command .. "' -secure"
 browser = {default   = {command = "firefox -p default",        tag = "2"},
            clean     = {command = "firefox -p clean",          tag = "3"},
            vol       = {command = "firefox -p vol",            tag = "4"},
-           adopte    = {command = "firefox -p adopte",         tag = "4"},
            afpa      = {command = "firefox -p afpa",           tag = "4"},
            developer = {command = "firefox-developer-edition", tag = "6"},
            music     = {command = "firefox -p soundcloud",     tag = "9"},
@@ -401,6 +400,7 @@ root.buttons(gears.table.join(
 -- Key bindings 
 ------------------------------------------------------------------------------
 awesomeManagingKeys = gears.table.join(
+    awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end),
     awful.key({ modkey, }, "o", function () charcodes_popup.show() end,
                                 function () charcodes_popup.hidde() end,
                                 {description="Affiche un popup ASCII",
@@ -578,7 +578,6 @@ applicationLaunchingKeys = gears.table.join(
             end
                         
         hostSpecificKeys = gears.table.join( 
-            awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end),
             awful.key({} ,"XF86TouchpadToggle", function () touchpad.toggle_state() end),
 
             awful.key({} ,"XF86MonBrightnessDown", function () brightness('down') end),
@@ -878,7 +877,6 @@ screen.connect_signal("property::geometry", set_wallpaper)
 ------------------------------------------------------------------------------
 if hostname == "burp" then
     awful.spawn(browser.default.command, {tag = browser.default.tag})
-    --awful.spawn(browser.adopte.command, {tag = browser.adopte.tag})
     --awful.spawn(browser.vol.command, {tag = browser.vol.tag})
     
     awful.spawn(torrent_client)
