@@ -177,7 +177,7 @@ local function client_menu_toggle_fn()
 end
 
 local function clipboard_url_to_mpv_ytdl()
-    local URL = string.gsub(io.popen("xclip -selection c -o"):read("*l"), 
+    local URL = string.gsub(io.popen("xclip -selection c -o"):read("*l"),
                             '^http:', 'https:')
 
     local CMD = "mpv --ytdl " .. URL
