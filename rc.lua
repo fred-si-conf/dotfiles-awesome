@@ -60,7 +60,7 @@ hostname = utils.get_hostname()
 config_directory = awful.util.getdir("config")
 
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(config_directory .. "themes/mytheme/theme.lua")
+beautiful.init(config_directory .. "theme/theme.lua")
 
 io.popen('pgrep urxvtd || urxvtd -o -f -q')
 terminal = "urxvtc"
