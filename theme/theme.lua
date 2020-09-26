@@ -4,7 +4,7 @@
 ---------------------------
 local theme_name = "mytheme"
 local awesome_config_dir = os.getenv("HOME") ..  "/.config/awesome/"
-local themes_dir = awesome_config_dir .. "themes/" .. theme_name .. "/"
+local themes_dir = awesome_config_dir .. "theme/"
 
 local theme = {}
 
