@@ -86,20 +86,14 @@ i3lock_command = string.format(lock_cmd, lock_image, lock_color)
 autolock = "xautolock -time 30 -locker '" .. i3lock_command .. "' -secure"
 
 -- Internet
-browser = {default = {command = "firefox -p default",
-                         tag = "2"},
-
-           clean = {command =  "firefox -p clean",
-                    tag = "3"},
-
-           adopte =  {command =  "firefox -p adopte",
-                      tag = "4"},
-        
-           vol = {command = "firefox -p vol",
-                  tag = "4"},
-
-           music = {command = "firefox -p soundcloud",
-                    tag = "9"}}
+browser = {default   = {command = "firefox -p default",        tag = "2"},
+           clean     = {command = "firefox -p clean",          tag = "3"},
+           vol       = {command = "firefox -p vol",            tag = "4"},
+           adopte    = {command = "firefox -p adopte",         tag = "4"},
+           afpa      = {command = "firefox -p afpa",           tag = "4"},
+           developer = {command = "firefox-developer-edition", tag = "6"},
+           music     = {command = "firefox -p soundcloud",     tag = "9"},
+}
 
 mail_client = "thunderbird"
 irc_client = terminal .. " -e tmux new-session -AD -s irc weechat" 
@@ -529,16 +523,7 @@ applicationLaunchingKeys = gears.table.join(
     -- Multimedia
     awful.key({ modkey, "Mod1"    }     , "s", function () awful.spawn(music_player) end),
 
-    awful.key({ modkey, "Mod1", "Shift"}, "s",
-        function ()
-            awful.spawn(
-                browser.music.command,
-                {
-                    tag = browser.music.tag
-                }
-            )
-        end
-    ),
+    awful.key({ modkey, "Mod1", "Shift"}, "s", function () awful.spawn(browser.music.command, {tag = browser.music.tag}) end),
 
     awful.key({ modkey, "Mod1"    }     , "c", function () awful.spawn("calibre") end),
 
