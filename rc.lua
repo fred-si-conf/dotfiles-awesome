@@ -442,7 +442,9 @@ awesomeManagingKeys = gears.table.join(
                 client.focus:raise()
             end
         end),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
+
+    awful.key({ modkey, "Control", "shift" }, "t", awful.screen.focus_relative(1)),
+    awful.key({ modkey, "Control", "shift" }, "s", awful.screen.focus_relative(-1)),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "s", function () awful.client.swap.byidx(  1)    end),
@@ -488,15 +490,16 @@ applicationLaunchingKeys = gears.table.join(
     awful.key({ modkey,           }     , "Return", function () awful.spawn(terminal) end),
     awful.key({ modkey, "Mod1"    }     , "f", function () awful.spawn(file_manager) end),
     awful.key({ modkey, "Mod1", "Shift"}, "f", function () awful.spawn(alternative_file_manager) end),
-    awful.key({ modkey, "Mod1"    }     , "e", function () awful.spawn(terminal .. ' -e ' .. editor) end),
 
-    awful.key({ modkey, "Mod1"    }     , "t", function () awful.spawn("truecrypt") end),
-
-    awful.key({ modkey, "Mod1", "Shift"}, "w", function () io.popen("systemctl poweroff -i") end),
+    awful.key({ modkey, "Mod1"    }     , "t", function () awful.spawn("veracrypt") end),
 
     -- Internet and web
     awful.key({ modkey, "Mod1"    }     , "v", function () awful.spawn(browser.default.command) end),
-    awful.key({ modkey, "Mod1", "Shift"}, "v", function () awful.spawn(browser.adopte.command) end),
+    awful.key({ modkey, "Mod1", "Shift"}, "v", function () awful.spawn(browser.afpa.command, {tag = browser.afpa.tag}) end),
+
+    awful.key({ modkey, "Mod1",        }, "j", function () awful.spawn(browser.developer.command, {tag = browser.developer.tag}) end),
+    awful.key({ modkey, "Mod1",        }, "s", function () awful.spawn(browser.music.command, {tag = browser.music.tag}) end),
+
     awful.key({ modkey, "Mod1"    }     , "d", function () awful.spawn(browser.clean.command) end),
     awful.key({ modkey, "Mod1", "Shift"}, "d", function () awful.spawn(browser.vol.command) end),
 
