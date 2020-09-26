@@ -182,6 +182,18 @@ local function client_menu_toggle_fn()
     end
 end
 
+local function clipboard_url_to_mpv_ytdl()
+    local URL = string.gsub(io.popen("xclip -selection c -o"):read("*l"), 
+                            '^http:', 'https:')
+
+    local CMD = "mpv --ytdl " .. URL
+    local VIDEO_TITLE = io.popen("youtube-dl -e " .. URL):read("*l")
+
+    awful.spawn(CMD)
+    naughty.notify({preset = naughty.config.presets.normal,
+                    title = "Launch mpv",
+                    text = VIDEO_TITLE .. "\n" .. URL})
+end
 ------------------------------------------------------------------------------
 -- Menu
 ------------------------------------------------------------------------------
@@ -532,7 +544,8 @@ applicationLaunchingKeys = gears.table.join(
 
     -- Divers
     awful.key({ modkey, "Mod1"    }     , "z", function () awful.spawn("zim") end),
-    awful.key({ modkey, "Mod1"    }     , "l", function () awful.spawn("libreoffice") end)
+    awful.key({ modkey, "Mod1"    }     , "l", function () awful.spawn("libreoffice") end),
+    awful.key({ modkey,           }     , "y", function () clipboard_url_to_mpv_ytdl() end)
 )
 
 -- Host specific keybinding
