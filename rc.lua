@@ -897,7 +897,7 @@ if hostname == "burp" then
     --awful.spawn(browser.vol.command, {tag = browser.vol.tag})
     
     awful.spawn(torrent_client)
-    awful.spawn(irc_client, { tag = "1" })
+    -- awful.spawn(irc_client, { tag = "1" })
     awful.spawn(browser.clean.command, {tag = browser.clean.tag})
     awful.spawn(mail_client)
 
@@ -911,5 +911,6 @@ end
 
 awful.spawn(autolock)
 awful.spawn('nextcloud')
+awful.spawn('copyq')
 
 -- vim:foldmethod=indent: foldcolumn=4: expandtab
