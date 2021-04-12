@@ -5,13 +5,13 @@
 local helpers = require("vicious.helpers")
 
 -- cmus widget type
-local function cmus(format, warg)
+local function cmus(...)
     local cmus_state  = {
-        ["{status}"] = "N/A",
-        ["{artist}"] = "N/A",
-        ["{title}"]  = "N/A",
-        ["{album}"]  = "N/A",
-        ["{genre}"]  = "N/A",
+        status = "N/A",
+        artist = "N/A",
+        title  = "N/A",
+        album  = "N/A",
+        genre  = "N/A",
     }
 
 
@@ -20,15 +20,15 @@ local function cmus(format, warg)
 
     for line in f:lines() do
         for k, v in string.gmatch(line, "([%w]+)[%s]([%w]+)$") do
-            if     k == "status" then cmus_state["{"..k.."}"] = helpers.capitalize(v)
+            if     k == "status" then cmus_state[k] = helpers.capitalize(v)
             end
         end
         for k, v in string.gmatch(line, "tag[%s]([%w]+)[%s](.*)$") do
-            if     k == "artist" then cmus_state["{"..k.."}"] = helpers.escape(v)
-            elseif k == "status" then cmus_state["{"..k.."}"] = helpers.escape(v)
-            elseif k == "title"  then cmus_state["{"..k.."}"] = helpers.escape(v)
-            elseif k == "album"  then cmus_state["{"..k.."}"] = helpers.escape(v)
-            elseif k == "genre"  then cmus_state["{"..k.."}"] = helpers.escape(v)
+            if     k == "artist" then cmus_state[k] = helpers.escape(v)
+            elseif k == "status" then cmus_state[k] = helpers.escape(v)
+            elseif k == "title"  then cmus_state[k] = helpers.escape(v)
+            elseif k == "album"  then cmus_state[k] = helpers.escape(v)
+            elseif k == "genre"  then cmus_state[k] = helpers.escape(v)
             end
         end
     end
