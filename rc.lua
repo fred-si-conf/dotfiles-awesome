@@ -24,6 +24,7 @@ local cmus = require("plugins.cmus")
 
 local charcodes_popup = require("plugins.charcodes")
 local browser = require("browser")
+local client_tools = require("utils.client")
 ------------------------------------------------------------------------------
 -- Error handling
 ------------------------------------------------------------------------------
@@ -138,10 +139,6 @@ end
 ------------------------------------------------------------------------------
 -- Misc functions
 ------------------------------------------------------------------------------
-local function launch_in_shell(appName)
-    awful.spawn(terminal .. " -e " .. appName)
-end
-
 local function set_wallpaper(s)
     if beautiful.wallpaper then
         local wallpaper = beautiful.wallpaper
@@ -154,19 +151,6 @@ local function set_wallpaper(s)
 end
 
 -- Helper functions
-local function client_menu_toggle_fn()
-    local instance = nil
-
-    return function ()
-        if instance and instance.wibox.visible then
-            instance:hide()
-            instance = nil
-        else
-            instance = awful.menu.clients({ theme = { width = 250 } })
-        end
-    end
-end
-
 local function clipboard_url_to_mpv_ytdl()
     local URL = string.gsub(io.popen("xclip -selection c -o"):read("*l"),
                             '^http:', 'https:')
@@ -265,54 +249,24 @@ vicious.register(cmus_widget, cmus,
 
 -- Create a wibox for each screen and add it
 local taglist_buttons, tasklist_buttons, buttons
-buttons = {one = awful.button({}, 1, function(t) t:view_only() end),
-                 mod_one = awful.button({modkey}, 1,
-                                        function(t)
-                                            if client.focus then
-                                                client.focus:move_to_tag(t)
-                                            end
-                                        end),
+buttons = {
+    left = awful.button({}, 1, function(t) t:view_only() end),
+    mod_left = awful.button({modkey}, 1, client_tools.move_focused_to_tag),
+    right = awful.button({}, 3, awful.tag.viewtoggle),
+    mod_right = awful.button({modkey}, 3, client_tools.display_focused_on_tag),
+}
+taglist_buttons = gears.table.join(
+    buttons.left,
+    buttons.mod_left,
+    buttons.right,
+    buttons.mod_right
+)
 
-                 three = awful.button({}, 3, awful.tag.viewtoggle),
-                 mod_three = awful.button({modkey}, 3,
-                                          function(t)
-                                              if client.focus then
-                                                  client.focus:toggle_tag(t)
-                                              end
-                                          end)}
-taglist_buttons = gears.table.join(buttons.one,
-                                   buttons.mod_one,
-                                   buttons.three,
-                                   buttons.mod_three)
-
-buttons = {one = awful.button({}, 1, function (c)
-                                          if c == client.focus then
-                                              c.minimized = true
-                                          else
-                                              -- Without this, the following
-                                              -- :isvisible() makes no sense
-                                              c.minimized = false
-                                              if not c:isvisible()
-                                                  and c.first_tag then
-                                                  c.first_tag:view_only()
-                                              end
-                                              -- This will also un-minimize
-                                              -- the client, if needed
-                                              client.focus = c
-                                              c:raise()
-                                          end
-                                      end),
-           three = awful.button({}, 3, client_menu_toggle_fn()),
-           four = awful.button({}, 4, function ()
-                                          awful.client.focus.byidx(1)
-                                      end),
-           five = awful.button({}, 5, function ()
-                                          awful.client.focus.byidx(-1)
-                                      end)}
-tasklist_buttons = gears.table.join(buttons.one,
-                                    buttons.three,
-                                    buttons.four,
-                                    buttons.five)
+buttons = {
+    left = awful.button({}, 1, client_tools.focus_or_minimize),
+    right = awful.button({}, 3, client_tools.menu_toggle()),
+}
+tasklist_buttons = gears.table.join(buttons.left, buttons.right)
 
 awful.screen.connect_for_each_screen(
     function(s)
@@ -383,8 +337,6 @@ awful.screen.connect_for_each_screen(
 -- Mouse bindings
 ------------------------------------------------------------------------------
 root.buttons(gears.table.join(
-    --awful.button({ }, 4, awful.tag.viewnext),
-    --awful.button({ }, 5, awful.tag.viewprev),
     awful.button({ }, 3, function () mymainmenu:toggle() end)
 ))
 
