@@ -14,7 +14,7 @@ local vicious = require("vicious")
 local beautiful = require("beautiful")
 
 -- Notification library
-local naughty = require("naughty")
+local notify = require("utils.notify")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 
@@ -31,25 +31,23 @@ local client_tools = require("utils.client")
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
-    naughty.notify({preset = naughty.config.presets.critical,
-                    title = "Oops, there were errors during startup!",
-                    text = awesome.startup_errors})
+    notify.critical("Oops, there were errors during startup!", awesome.startup_errors)
 end
 
 -- Handle runtime errors after startup
 do
     local in_error = false
-    awesome.connect_signal("debug::error",
-                           function (err)
-                               -- Make sure we don't go into an endless error loop
-                               if in_error then return end
+    awesome.connect_signal(
+        "debug::error",
+        function (err)
+            -- Make sure we don't go into an endless error loop
+            if in_error then return end
 
-                               in_error = true
-                               naughty.notify({preset = naughty.config.presets.critical,
-                                               title = "Oops, an error happened!",
-                                               text = tostring(err)})
-                               in_error = false
-                           end)
+            in_error = true
+            notify.critical("Oops, an error happened!", tostring(err))
+            in_error = false
+        end
+    )
 end
 
 ------------------------------------------------------------------------------
@@ -159,9 +157,7 @@ local function clipboard_url_to_mpv_ytdl()
     local VIDEO_TITLE = io.popen("youtube-dl -e " .. URL):read("*l")
 
     awful.spawn(CMD)
-    naughty.notify({preset = naughty.config.presets.normal,
-                    title = "Launch mpv",
-                    text = VIDEO_TITLE .. "\n" .. URL})
+    notify.normal("Launch mpv", VIDEO_TITLE .. "\n" .. URL)
 end
 ------------------------------------------------------------------------------
 -- Menu
