@@ -8,7 +8,6 @@ require("awful.autofocus")
 
 -- Widget and layout library
 local wibox = require("wibox")
-local vicious = require("vicious")
 
 -- Theme handling library
 local beautiful = require("beautiful")
@@ -184,39 +183,6 @@ my_spacer = wibox.widget {
 
 mytextclock = wibox.widget.textclock(" %a %d %b  %H:%M:%S ", 1)
 
-cpu_widget = wibox.widget.graph()
-cpu_widget:set_width(25)
-cpu_widget:set_background_color("#494B4F")
-cpu_widget:set_color{type = "linear", from = {0, 0}, to = {0, 20},
-                    stops = {{0, "red"}, {0.5, "yellow"}, {1, "green"}}}
-vicious.register(cpu_widget, vicious.widgets.cpu, "$1", 1)
-
-
-mem_bar = wibox.widget.progressbar()
-mem_widget = wibox.widget {
-    {
-        max_value = 1,
-        widget    = mem_bar,
-        color     = "red",
-        background_color = "#494B4F",
-    },
-    forced_width = 7,
-    direction = 'east',
-    layout = wibox.container.rotate,
-}
-vicious.register(mem_bar, vicious.widgets.mem, "$1", 2)
-
-cmus_widget = wibox.widget.textbox()
-vicious.register(cmus_widget, cmus,
-    function (widget, args)
-        if args["{status}"] == "Stopped" then
-            return " - "
-        else
-            return args["{status}"]..': '.. args["{artist}"]..' - '.. args["{title}"]
-        end
-    end, 1)
-
-
 -- Create a wibox for each screen and add it
 local taglist_buttons, tasklist_buttons, buttons
 buttons = {
@@ -284,15 +250,13 @@ awful.screen.connect_for_each_screen(
                     capslock,
                     my_spacer,
 
-                    cpu_widget,
+                    require("widgets.cpu"),
                     my_spacer,
 
-                    mem_widget,
+                    require("widgets.memory"),
                     my_spacer,
 
-                    batbox,
-
-                    cmus_widget,
+                    require("widgets.cmus"),
                     my_spacer,
 
                     wibox.widget.systray(),

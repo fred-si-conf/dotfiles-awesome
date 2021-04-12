@@ -1,12 +1,13 @@
--- This module provide a simple battery_widget
--- for use it simple register widget to vicious
--- vicious.register(require("plugins.battery"), vicious.widgets.bat, "$2", 120, "BATC")
+-- This module provide a simple battery_widget for use it simple add widget to
+-- your statusbar
+
+vicious = require("vicious")
 
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
-battery_widget = wibox.widget.progressbar()
-batbox = wibox.widget {
+local battery_widget = wibox.widget.progressbar()
+local batbox = wibox.widget {
     {
         max_value     = 1,
         widget        = battery_widget,
@@ -32,4 +33,6 @@ batbox = wibox.widget {
 
 batbox = wibox.container.margin(batbox, 4, 4, 4, 4)
 
-return battery_widget
+vicious.register(widget, vicious.widgets.bat, "$2", 120, "BATC")
+
+return batbox
