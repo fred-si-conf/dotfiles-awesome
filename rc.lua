@@ -23,7 +23,7 @@ local capslock = require("plugins.capslock")
 local cmus = require("plugins.cmus")
 
 local charcodes_popup = require("plugins.charcodes")
-
+local browser = require("browser")
 ------------------------------------------------------------------------------
 -- Error handling
 ------------------------------------------------------------------------------
@@ -86,14 +86,6 @@ i3lock_command = string.format(lock_cmd, lock_image, lock_color)
 autolock = "xautolock -time 30 -locker '" .. i3lock_command .. "' -secure"
 
 -- Internet
-browser = {default   = {command = "firefox -p default",        tag = "2"},
-           clean     = {command = "firefox -p clean",          tag = "3"},
-           vol       = {command = "firefox -p vol",            tag = "4"},
-           afpa      = {command = "firefox -p afpa",           tag = "4"},
-           developer = {command = "firefox-developer-edition", tag = "6"},
-           music     = {command = "firefox -p soundcloud",     tag = "9"},
-}
-
 mail_client = "thunderbird"
 irc_client = terminal .. " -e tmux new-session -AD -s irc weechat" 
 
@@ -506,14 +498,13 @@ applicationLaunchingKeys = gears.table.join(
     awful.key({ modkey, "Mod1"    }     , "t", function () awful.spawn("veracrypt") end),
 
     -- Internet and web
-    awful.key({ modkey, "Mod1"    }     , "v", function () awful.spawn(browser.default.command) end),
-    awful.key({ modkey, "Mod1", "Shift"}, "v", function () awful.spawn(browser.afpa.command, {tag = browser.afpa.tag}) end),
+    awful.key({ modkey, "Mod1"    }     , "v", function () awful.spawn(browser:get_command('default')) end),
+    awful.key({ modkey, "Mod1", "Shift"}, "v", function () awful.spawn(browser:get_command('afpa')) end),
 
-    awful.key({ modkey, "Mod1",        }, "j", function () awful.spawn(browser.developer.command, {tag = browser.developer.tag}) end),
-    awful.key({ modkey, "Mod1",        }, "s", function () awful.spawn(browser.music.command, {tag = browser.music.tag}) end),
+    awful.key({ modkey, "Mod1",        }, "j", function () awful.spawn(browser:get_command('dev')) end),
 
-    awful.key({ modkey, "Mod1"    }     , "d", function () awful.spawn(browser.clean.command) end),
-    awful.key({ modkey, "Mod1", "Shift"}, "d", function () awful.spawn(browser.vol.command) end),
+    awful.key({ modkey, "Mod1"    }     , "d", function () awful.spawn(browser:get_command('clean')) end),
+    awful.key({ modkey, "Mod1", "Shift"}, "d", function () awful.spawn(browser:get_command('vol')) end),
 
     awful.key({ modkey, "Mod1"    }     , "m", function () awful.spawn(mail_client) end),
     awful.key({ modkey, "Mod1"    }     , "i", function () awful.spawn(irc_client, {tag = "1"}) end),
@@ -523,7 +514,7 @@ applicationLaunchingKeys = gears.table.join(
     -- Multimedia
     awful.key({ modkey, "Mod1"    }     , "s", function () awful.spawn(music_player) end),
 
-    awful.key({ modkey, "Mod1", "Shift"}, "s", function () awful.spawn(browser.music.command, {tag = browser.music.tag}) end),
+    awful.key({ modkey, "Mod1", "Shift"}, "s", function () awful.spawn(browser:get_command('music')) end),
 
     awful.key({ modkey, "Mod1"    }     , "c", function () awful.spawn("calibre") end),
 
@@ -735,9 +726,11 @@ root.keys(globalKeys)
 ------------------------------------------------------------------------------
 -- Rules to apply to new clients (through the "manage" signal).
 ------------------------------------------------------------------------------
-awful.rules.rules = require("clients_rules")(clientkeys, clientbuttons)
-
-------------------------------------------------------------------------------
+awful.rules.rules = gears.table.join(
+    require("clients_rules")(clientkeys, clientbuttons),
+    browser:get_rules()
+)
+--------------------------------------------------------------------------------
 -- Signals
 ------------------------------------------------------------------------------
 -- Signal function to execute when a new client appears.
@@ -817,26 +810,20 @@ screen.connect_signal("property::geometry", set_wallpaper)
 ------------------------------------------------------------------------------
 -- Applications launched at startup
 ------------------------------------------------------------------------------
-if hostname == "burp" then
-    awful.spawn(browser.default.command, {tag = browser.default.tag})
-    --awful.spawn(browser.vol.command, {tag = browser.vol.tag})
-    
-    awful.spawn(torrent_client)
-    awful.spawn("discord")
-    -- awful.spawn(irc_client, { tag = "1" })
-    awful.spawn(browser.clean.command, {tag = browser.clean.tag})
-    awful.spawn(mail_client)
-
-    awful.spawn(terminal .. " -e tmux new-session -AD -s admin", {tag = "8"})
-    awful.spawn(music_player, {tag = "9"})
-
-elseif hostname == "lysa" then
-    awful.spawn('gnome-keyring-daemon --start --foreground --componements=secrets')
-
+for _, command in pairs(browser:get_autolaunch()) do
+    awful.spawn.once(command, {})
 end
 
-awful.spawn(autolock)
-awful.spawn('nextcloud')
-awful.spawn('copyq')
+awful.spawn.once(torrent_client, {})
+awful.spawn.once("discord", {})
+-- awful.spawn(irc_client, { tag = "1" })
+awful.spawn.once(mail_client, {})
+
+awful.spawn.once(terminal .. " -e tmux new-session -AD -s admin", {tag = "8"})
+awful.spawn.once(music_player, {tag = "9"})
+
+awful.spawn.once(autolock, {})
+awful.spawn.once('nextcloud', {})
+awful.spawn.once('copyq', {})
 
 -- vim:foldmethod=indent: foldcolumn=4: expandtab

@@ -64,7 +64,7 @@ return function (client_keys, client_buttons)
         {
             rule = { class = "mplayer" },
             properties = { border_width = 0 }
-        }
+        },
     }
 end
 
