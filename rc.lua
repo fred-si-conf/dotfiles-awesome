@@ -754,26 +754,16 @@ awful.rules.rules = {
     -- Floating clients.
     {
         rule_any = {
-            instance = {
-              "DTA",  -- Firefox addon DownThemAll.
-              "copyq",  -- Includes session name in class.
-            },
-
             class = {
               "Arandr",
-              "Gpick",
-              "Kruler",
-              "MessageWin",  -- kalarm.
               "Sxiv",
-              "Wpa_gui",
               "pinentry",
-              "veromix",
-              "xtightvncviewer"
+              "copyq",  -- Includes session name in class.
+              "Gnome-calculator",
             },
 
             name = {
               "Event Tester",  -- xev.
-              "gnome-calculator",  -- xev.
             },
 
             role = {
@@ -785,8 +775,23 @@ awful.rules.rules = {
     },
 
     {
-        rule = { class = "Thunderbird" },
-        properties = { screen = 1, tag = "1" }
+        properties = { screen = 1, tag = "1" },
+        rule_any = {
+            class = {
+                "Thunderbird",
+                "discord",
+                "Signal",
+            }
+        },
+    },
+    {
+        properties = { screen = 1, tag = "5" },
+        rule_any = {
+            class = {
+                "jetbrains-idea-ce",
+                "code-oss",
+            }
+        },
     },
 
     {
@@ -880,6 +885,7 @@ if hostname == "burp" then
     --awful.spawn(browser.vol.command, {tag = browser.vol.tag})
     
     awful.spawn(torrent_client)
+    awful.spawn("discord")
     -- awful.spawn(irc_client, { tag = "1" })
     awful.spawn(browser.clean.command, {tag = browser.clean.tag})
     awful.spawn(mail_client)
