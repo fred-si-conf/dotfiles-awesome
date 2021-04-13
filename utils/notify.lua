@@ -3,14 +3,23 @@ local naughty = require("naughty")
 local notify = naughty.notify
 local presets = naughty.config.presets
 
+local Notification = {}
+function Notification:init(args)
+    self.notification = notify(args)
+end
 
-local function notifier(a_preset)
-    return function(a_title, a_text)
-        notify({preset = a_preset, title = a_title, text = a_text})
+function Notification:destroy()
+    naughty.destroy(self.notification)
+end
+
+
+local function create_notifier(preset)
+    return function(title, text)
+        return Notification:init({preset = preset, title = title, text = text})
     end
 end
 
 return {
-    critical = notifier(presets.critical),
-    normal = notifier(presets.normal), 
+    critical = create_notifier(presets.critical),
+    normal = create_notifier(presets.normal), 
 }
