@@ -17,7 +17,7 @@ local notify = require("utils.notify")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 
-local utils = require("plugins.utils")
+local env = require("utils.env")
 local capslock = require("plugins.capslock")
 local cmus = require("plugins.cmus")
 
@@ -54,7 +54,7 @@ end
 ------------------------------------------------------------------------------
 modkey = "Mod4"
 
-hostname = utils.get_hostname()
+hostname = env:hostname()
 config_directory = awful.util.getdir("config")
 
 -- Themes define colours, icons, font and wallpapers.
