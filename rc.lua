@@ -13,17 +13,18 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 
 -- Notification library
-local notify = require("utils.notify")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 
-local env = require("utils.env")
-local capslock = require("plugins.capslock")
-local cmus = require("plugins.cmus")
-
-local charcodes_popup = require("plugins.charcodes")
-local browser = require("browser")
 local client_tools = require("utils.client")
+local notify = require("utils.notify")
+
+local caps_lock = require("widgets.caps_lock")
+local env = require("utils.env")
+local cmus = require("plugins.cmus")
+local charcodes_popup = require("plugins.charcodes")
+
+local browser = require("browser")
 ------------------------------------------------------------------------------
 -- Error handling
 ------------------------------------------------------------------------------
@@ -247,7 +248,8 @@ awful.screen.connect_for_each_screen(
                 s.mytasklist, -- Middle widget
                 { -- Right widgets
                     layout = wibox.layout.fixed.horizontal,
-                    capslock,
+                    my_spacer,
+                    caps_lock.widget,
                     my_spacer,
 
                     require("widgets.cpu"),
@@ -547,7 +549,7 @@ globalKeys = gears.table.join(
     applicationLaunchingKeys,
     hostSpecificKeys,
     multimediaKeys,
-    capslock.key
+    caps_lock.key
 )
 
 -- Bind all key numbers to tags.
