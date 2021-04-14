@@ -21,6 +21,7 @@ local notify = require("utils.notify")
 
 local caps_lock = require("widgets.caps_lock")
 local env = require("utils.env")
+
 local charcodes_popup = require("plugins.charcodes")
 
 local browser = require("browser")
@@ -117,18 +118,6 @@ local function set_wallpaper(s)
         end
         gears.wallpaper.maximized(wallpaper, s, true)
     end
-end
-
--- Helper functions
-local function clipboard_url_to_mpv_ytdl()
-    local URL = string.gsub(io.popen("xclip -selection c -o"):read("*l"),
-                            '^http:', 'https:')
-
-    local CMD = "mpv --ytdl " .. URL
-    local VIDEO_TITLE = io.popen("youtube-dl -e " .. URL):read("*l")
-
-    awful.spawn(CMD)
-    notify.normal("Launch mpv", VIDEO_TITLE .. "\n" .. URL)
 end
 ------------------------------------------------------------------------------
 -- Menu
@@ -380,7 +369,7 @@ applicationLaunchingKeys = gears.table.join(
     -- Divers
     awful.key({ modkey, "Mod1"    }     , "z", function () awful.spawn("zim") end),
     awful.key({ modkey, "Mod1"    }     , "l", function () awful.spawn("libreoffice") end),
-    awful.key({ modkey,           }     , "y", function () clipboard_url_to_mpv_ytdl() end)
+    awful.key({ modkey,           }     , "y", require("plugins.mpv").ytdl_from_clipboard)
 )
 
 -- Host specific keybinding
