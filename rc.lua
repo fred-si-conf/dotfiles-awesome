@@ -21,7 +21,6 @@ local notify = require("utils.notify")
 
 local caps_lock = require("widgets.caps_lock")
 local env = require("utils.env")
-local cmus = require("plugins.cmus")
 local charcodes_popup = require("plugins.charcodes")
 
 local browser = require("browser")
