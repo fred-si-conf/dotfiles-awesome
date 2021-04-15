@@ -16,14 +16,12 @@ local beautiful = require("beautiful")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 
-local client_tools = require("utils.client")
-local notify = require("utils.notify")
+local status_bar = require("status_bar")
 
-local caps_lock = require("widgets.caps_lock")
+local notify = require("utils.notify")
 local env = require("utils.env")
 
 local charcodes_popup = require("plugins.charcodes")
-
 local browser = require("browser")
 ------------------------------------------------------------------------------
 -- Error handling
@@ -54,6 +52,7 @@ end
 -- Variables definitions
 ------------------------------------------------------------------------------
 modkey = "Mod4"
+os.setlocale("fr_FR.UTF-8")
 
 hostname = env:hostname()
 config_directory = awful.util.getdir("config")
@@ -95,6 +94,9 @@ if hostname == "burp" then
 end
 
 
+-- Menubar configuration
+-- Set the terminal for applications that require it
+menubar.utils.terminal = terminal
 ------------------------------------------------------------------------------
 -- Table of layouts to cover with awful.layout.inc, order matters.
 ------------------------------------------------------------------------------
@@ -119,52 +121,10 @@ local function set_wallpaper(s)
         gears.wallpaper.maximized(wallpaper, s, true)
     end
 end
-------------------------------------------------------------------------------
--- Menu
-------------------------------------------------------------------------------
--- Create a laucher widget and a main menu
-menu_items = {{"hotkeys", function() return false, hotkeys_popup.show_help end}}
-mymainmenu = awful.menu({items = menu_items})
-mylauncher = awful.widget.launcher({image = beautiful.awesome_icon,
-                                    menu = mymainmenu})
-
--- Menubar configuration
--- Set the terminal for applications that require it
-menubar.utils.terminal = terminal
-
 
 ------------------------------------------------------------------------------
--- Widgets
+-- status bar
 ------------------------------------------------------------------------------
-os.setlocale("fr_FR.UTF-8")
-my_spacer = wibox.widget {
-    widget = wibox.widget.textbox,
-    text = ' ',
-}
-
-mytextclock = wibox.widget.textclock(" %a %d %b  %H:%M:%S ", 1)
-
--- Create a wibox for each screen and add it
-local taglist_buttons, tasklist_buttons, buttons
-buttons = {
-    left = awful.button({}, 1, function(t) t:view_only() end),
-    mod_left = awful.button({modkey}, 1, client_tools.move_focused_to_tag),
-    right = awful.button({}, 3, awful.tag.viewtoggle),
-    mod_right = awful.button({modkey}, 3, client_tools.display_focused_on_tag),
-}
-taglist_buttons = gears.table.join(
-    buttons.left,
-    buttons.mod_left,
-    buttons.right,
-    buttons.mod_right
-)
-
-buttons = {
-    left = awful.button({}, 1, client_tools.focus_or_minimize),
-    right = awful.button({}, 3, client_tools.menu_toggle()),
-}
-tasklist_buttons = gears.table.join(buttons.left, buttons.right)
-
 awful.screen.connect_for_each_screen(
     function(s)
         set_wallpaper(s)
@@ -174,67 +134,9 @@ awful.screen.connect_for_each_screen(
         awful.tag.new({"8", "9"}, s, awful.layout.suit.max)
         s.tags[8]:view_only() -- focus le tag 8 au démarrage
 
-        -- Create a promptbox for each screen
-        s.mypromptbox = awful.widget.prompt()
-        -- Create an imagebox widget which will contains an icon indicating which layout we're using.
-        -- We need one layoutbox per screen.
-        s.mylayoutbox = awful.widget.layoutbox(s)
-        s.mylayoutbox:buttons(
-            gears.table.join(
-                awful.button({ }, 1, function () awful.layout.inc( 1) end),
-                awful.button({ }, 3, function () awful.layout.inc(-1) end),
-                awful.button({ }, 4, function () awful.layout.inc( 1) end),
-                awful.button({ }, 5, function () awful.layout.inc(-1) end)
-            )
-        )
-        -- Create a taglist widget
-        s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
-
-        -- Create a tasklist widget
-        s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
-
-        -- Create the wibox
-        s.mywibox = awful.wibar({ position = "top", screen = s })
-
-        -- Add widgets to the wibox
-        s.mywibox:setup {
-            layout = wibox.layout.align.horizontal,
-                { -- Left widgets
-                    layout = wibox.layout.fixed.horizontal,
-                    mylauncher,
-                    s.mytaglist,
-                    s.mypromptbox,
-                },
-                s.mytasklist, -- Middle widget
-                { -- Right widgets
-                    layout = wibox.layout.fixed.horizontal,
-                    my_spacer,
-                    caps_lock.widget,
-                    my_spacer,
-
-                    require("widgets.cpu"),
-                    my_spacer,
-
-                    require("widgets.memory"),
-                    my_spacer,
-
-                    require("widgets.cmus"),
-                    my_spacer,
-
-                    wibox.widget.systray(),
-                    mytextclock,
-                    s.mylayoutbox,
-                },
-        }
+        status_bar(s)
     end
 )
-
-------------------------------------------------------------------------------
--- Mouse bindings
-------------------------------------------------------------------------------
-root.buttons(gears.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end)
-))
 
 ------------------------------------------------------------------------------
 -- Key bindings 
@@ -509,7 +411,7 @@ globalKeys = gears.table.join(
     applicationLaunchingKeys,
     hostSpecificKeys,
     multimediaKeys,
-    caps_lock.key
+    status_bar.caps_lock_key
 )
 
 -- Bind all key numbers to tags.
