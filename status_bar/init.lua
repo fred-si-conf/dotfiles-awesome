@@ -69,7 +69,7 @@ local function new(screen)
 end
 
 return setmetatable(
-    {caps_lock_key = caps_lock.key},
+    {},
     {__call = function(_, ...) new(...) end}
 )
     
