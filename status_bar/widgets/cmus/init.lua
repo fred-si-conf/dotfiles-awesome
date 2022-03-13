@@ -3,8 +3,6 @@ local helpers = require("vicious.helpers")
 
 local get_state = require(select(1, ...) .. ".get_state")
 
-local icons_dir = select(2, ...):gsub('/[^/]+$', '') .. '/icons'
-
 text_format = "$status: $artist - $title"
 
 local function to_string(args)
