@@ -56,6 +56,7 @@ return function (client_keys, client_buttons)
             rule_any = {
                 class = {
                     "jetbrains-idea-ce",
+                    "jetbrains-phpstorm",
                     "code-oss",
                 }
             },
@@ -64,6 +65,22 @@ return function (client_keys, client_buttons)
         {
             rule = { class = "mplayer" },
             properties = { border_width = 0 }
+        },
+
+        -- Jetbrains
+        {
+            -- start popups
+            properties = {
+                floating = true,
+                placement = awful.placement.centered,
+            },
+            rule_any = {
+                name = {
+                    "Trust and Open Project.*",
+                    "Cannot execute command",
+                    "win0"
+                },
+            }
         },
     }
 end
