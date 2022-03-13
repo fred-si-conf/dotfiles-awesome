@@ -6,9 +6,6 @@ local gears = require("gears")
 local awful = require("awful")
 require("awful.autofocus")
 
--- Widget and layout library
-local wibox = require("wibox")
-
 -- Theme handling library
 local beautiful = require("beautiful")
 
@@ -142,6 +139,7 @@ awful.screen.connect_for_each_screen(
 -- Key bindings 
 ------------------------------------------------------------------------------
 awesomeManagingKeys = gears.table.join(
+    awful.key({}, "Caps_Lock", function() awesome.emit_signal("Caps_Lock::press")  end),
     awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end),
     awful.key({ modkey, }, "o", function () charcodes_popup.show() end,
                                 function () charcodes_popup.hidde() end,
