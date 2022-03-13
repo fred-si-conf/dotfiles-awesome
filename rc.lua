@@ -334,10 +334,10 @@ applicationLaunchingKeys = gears.table.join(
 -- Multimedia keys
     if hostname == "burp" then
         local sound = {}
-            sound.card = ",0"
-            sound.control = " Master"
-            sound.step = " 10%"
-            sound.command = "amixer set" .. sound.control .. sound.card
+            sound.card = "0"
+            sound.control = " Master "
+            sound.step = " 5%"
+            sound.command = "amixer -c " .. sound.card .. " sset" .. sound.control
             sound.toggle = sound.command .. " toggle"
             sound.down = sound.command .. sound.step .. "-"
             sound.up = sound.command .. sound.step .. "+"
