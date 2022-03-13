@@ -249,12 +249,12 @@ applicationLaunchingKeys = gears.table.join(
 
     -- Internet and web
     awful.key({ modkey, "Mod1"    }     , "v", function () awful.spawn(browser:get_command('default')) end),
-    awful.key({ modkey, "Mod1", "Shift"}, "v", function () awful.spawn(browser:get_command('afpa')) end),
+    awful.key({ modkey, "Mod1", "Shift"}, "d", function () awful.spawn(browser:get_command('afpa')) end),
 
     awful.key({ modkey, "Mod1",        }, "j", function () awful.spawn(browser:get_command('dev')) end),
 
     awful.key({ modkey, "Mod1"    }     , "d", function () awful.spawn(browser:get_command('clean')) end),
-    awful.key({ modkey, "Mod1", "Shift"}, "d", function () awful.spawn(browser:get_command('vol')) end),
+    awful.key({ modkey, "Mod1", "Shift"}, "v", function () awful.spawn(browser:get_command('vol')) end),
 
     awful.key({ modkey, "Mod1"    }     , "m", function () awful.spawn(mail_client) end),
     awful.key({ modkey, "Mod1"    }     , "i", function () awful.spawn(irc_client, {tag = "1"}) end),
