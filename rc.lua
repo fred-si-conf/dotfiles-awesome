@@ -475,6 +475,11 @@ client.connect_signal("manage", function (c, startup)
             awful.placement.no_overlap(c)
             awful.placement.no_offscreen(c)
         end
+
+        -- Automatically close jetbrains toolbox on unfocus
+        if c.class == "com-jetbrains-toolbox-entry-ToolboxEntry" then
+            c:connect_signal("unfocus", function(c) c:kill()  end)
+        end
     end
 end)
 
