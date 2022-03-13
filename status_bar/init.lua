@@ -42,7 +42,8 @@ local function create_right_layout(screen)
         layout = wibox.layout.fixed.horizontal,
 
         spacer,
-        caps_lock.widget, spacer,
+        caps_lock,
+        spacer,
 
         require_widget("cpu"), spacer,
         require_widget("memory"), spacer,

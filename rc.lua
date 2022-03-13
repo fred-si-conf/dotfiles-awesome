@@ -410,8 +410,7 @@ globalKeys = gears.table.join(
     awesomeManagingKeys,
     applicationLaunchingKeys,
     hostSpecificKeys,
-    multimediaKeys,
-    status_bar.caps_lock_key
+    multimediaKeys
 )
 
 -- Bind all key numbers to tags.

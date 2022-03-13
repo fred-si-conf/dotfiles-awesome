@@ -12,17 +12,15 @@
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            caps_lock.widget
+            caps_lock
             -- more stuff
         }
     }
 
-    -- Add key to globalkeys
-    globalkeys = gears.table.join(globalkeys, caps_lock.key)
-
+    -- emit "Caps_Lock::press" event on caps lock key_press
+    awful.key({}, "Caps_Lock", function() awesome.emit_signal("Caps_Lock::press")
 ]]
 
-local awful = require("awful")
 local wibox = require("wibox")
 
 local widget = wibox.widget {
@@ -31,27 +29,31 @@ local widget = wibox.widget {
     valign = "center",
     base_markup = '<span background="red"><b>%s</b></span>',
     active_text = ' CAPS LOCK ',
-    inactive_text = ''
+    inactive_text = '',
+    is_active = nil
 }
 
-function is_active(xset_output)
-    if xset_output:gsub(".*(Caps Lock:%s+)(%a+).*", "%2") == 'on' then
-        return true
-    end
+function widget:init()
+    local stdout = io.popen("xset q")
+    local xset_output = stdout:read("*all")
+    stdout:close()
 
-    return false
+    self.is_active = xset_output:gsub(".*(Caps Lock:%s+)(%a+).*", "%2") == 'on'
+    self:update()
+
+    awesome.connect_signal("Caps_Lock::press", function() widget:toggle() end)
 end
 
 function widget:update()
-    awful.spawn.easy_async('xset q', function (output)
-        local text = is_active(output) and self.active_text or self.inactive_text
-        self.markup = string.format(self.base_markup, text)
-    end)
+    local text = self.is_active and self.active_text or self.inactive_text
+    self.markup = string.format(self.base_markup, text)
 end
 
-widget:update()
+function widget:toggle()
+    self.is_active = not self.is_active
+    self:update()
+end
 
-return {
-    widget = widget,
-    key = awful.key({}, "Caps_Lock", function() end, function () widget:update() end),
-}
+
+widget:init()
+return widget
