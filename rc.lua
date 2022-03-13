@@ -17,6 +17,7 @@ local status_bar = require("status_bar")
 
 local notify = require("utils.notify")
 local env = require("utils.env")
+local dump = require("utils.dump_table")
 
 local charcodes_popup = require("plugins.charcodes")
 local browser = require("browser")
@@ -140,6 +141,13 @@ awful.screen.connect_for_each_screen(
 ------------------------------------------------------------------------------
 awesomeManagingKeys = gears.table.join(
     awful.key({}, "Caps_Lock", function() awesome.emit_signal("Caps_Lock::press")  end),
+    awful.key({modkey,       }, "g",
+        function() notify.critical("Client properties", dump(client.focus)) end,
+        {
+            description = "Affiche une notification avec les informations sur le client focus",
+            group = "awesome",
+        }),
+
     awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end),
     awful.key({ modkey, }, "o", function () charcodes_popup.show() end,
                                 function () charcodes_popup.hidde() end,
