@@ -85,7 +85,7 @@ autolock = "xautolock -time 30 -locker '" .. i3lock_command .. "' -secure"
 
 -- Internet
 mail_client = "thunderbird"
-irc_client = terminal .. " -e tmux new-session -AD -s irc weechat" 
+irc_client = terminal .. " -e tmux new-session -AD -s irc weechat"
 
 if hostname == "burp" then
     suspend = i3lock_command .. ' && systemctl suspend -i'
@@ -179,7 +179,7 @@ awesomeManagingKeys = gears.table.join(
             description="open the calculator application",
             group="applications"
         }),
-    
+
     awful.key({ modkey,           }, "Left",  awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right", awful.tag.viewnext       ),
     awful.key({ modkey, "Control" }, "t", awful.tag.viewprev       ),
@@ -239,7 +239,7 @@ awesomeManagingKeys = gears.table.join(
     awful.key({ modkey,           }, "p", function() menubar.show() end)
 )
 
-applicationLaunchingKeys = gears.table.join( 
+applicationLaunchingKeys = gears.table.join(
     -- Administration
     awful.key({ modkey,           }     , "Return", function () awful.spawn(terminal) end),
     awful.key({ modkey, "Mod1"    }     , "f", function () awful.spawn(file_manager) end),
@@ -276,7 +276,7 @@ applicationLaunchingKeys = gears.table.join(
 
 -- Host specific keybinding
     if hostname == "burp" then
-        hostSpecificKeys = gears.table.join( 
+        hostSpecificKeys = gears.table.join(
             awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end)
         )
 
@@ -317,8 +317,8 @@ applicationLaunchingKeys = gears.table.join(
                     touchpad.switch_on()
                 end
             end
-                        
-        hostSpecificKeys = gears.table.join( 
+
+        hostSpecificKeys = gears.table.join(
             awful.key({} ,"XF86TouchpadToggle", function () touchpad.toggle_state() end),
 
             awful.key({} ,"XF86MonBrightnessDown", function () brightness('down') end),
