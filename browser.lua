@@ -48,7 +48,13 @@ function Mod:list_profiles()
 end
 
 function Mod:get_rules()
-    rules = {}
+    rules = {
+        {
+            rule = { role = "About" },
+            properties = { floating = true },
+        }
+
+    }
     for k, v in pairs(browsers) do
         table.insert(rules, {
                 rule = {class = get_wm_class(k)},
@@ -61,7 +67,7 @@ end
 
 function Mod:get_command(name)
     config = browsers[name]
-    command = {} 
+    command = {}
 
     if config.executable then
         table.insert(command, config.executable)
