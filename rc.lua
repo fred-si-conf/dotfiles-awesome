@@ -141,7 +141,11 @@ awful.screen.connect_for_each_screen(
 -- Key bindings 
 ------------------------------------------------------------------------------
 awesomeManagingKeys = gears.table.join(
-    awful.key({}, "Caps_Lock", function() awesome.emit_signal("Caps_Lock::press")  end),
+    awful.key({            }, "Caps_Lock", function() awesome.emit_signal("Caps_Lock::press")  end),
+    awful.key({ modkey,    }, "Caps_Lock", function() awesome.emit_signal("Caps_Lock::press")  end),
+    awful.key({ "Control", }, "Caps_Lock", function() awesome.emit_signal("Caps_Lock::press")  end),
+    awful.key({ "Shift",   }, "Caps_Lock", function() awesome.emit_signal("Caps_Lock::press")  end),
+
     awful.key({modkey,       }, "g",
         function() notify.critical("Client properties", dump(client.focus)) end,
         {
