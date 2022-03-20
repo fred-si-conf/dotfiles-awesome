@@ -40,6 +40,13 @@ return function (client_keys, client_buttons)
                 }
             },
         },
+        {
+            rule = { class = "copyq" },
+            properties = {
+                placement = awful.placement.top_right,
+                height = awful.screen.focused().workarea.height,
+            },
+        },
 
         {
             properties = { screen = 1, tag = "1" },
