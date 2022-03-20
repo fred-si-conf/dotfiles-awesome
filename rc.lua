@@ -20,6 +20,7 @@ local env = require("utils.env")
 local dump = require("utils.dump_table")
 
 local charcodes_popup = require("plugins.charcodes")
+local multimedia = require("utils.multimedia")
 local browser = require("browser")
 ------------------------------------------------------------------------------
 -- Error handling
@@ -339,33 +340,19 @@ applicationLaunchingKeys = gears.table.join(
 
 -- Multimedia keys
     if hostname == "burp" then
-        local sound = {}
-            sound.card = "0"
-            sound.control = " Master "
-            sound.step = " 5%"
-            sound.command = "amixer -c " .. sound.card .. " sset" .. sound.control
-            sound.toggle = sound.command .. " toggle"
-            sound.down = sound.command .. sound.step .. "-"
-            sound.up = sound.command .. sound.step .. "+"
-
-        local music_player_controls = {
-            play = "cmus-remote -u",
-            stop = "cmus-remote -s",
-            previous_track = "cmus-remote -r",
-            next_track = "cmus-remote -n"
-        }
-
+        player = multimedia.player
+        volume = multimedia.volume
         multimediaKeys = gears.table.join(
             -- Sound control
-            awful.key({} ,"XF86AudioMute", function () io.popen(sound.toggle) end),
-            awful.key({} ,"XF86AudioLowerVolume", function () io.popen(sound.down) end),
-            awful.key({} ,"XF86AudioRaiseVolume", function () io.popen(sound.up) end),
+            awful.key({} ,"XF86AudioMute", volume.mute),
+            awful.key({} ,"XF86AudioLowerVolume", volume.down),
+            awful.key({} ,"XF86AudioRaiseVolume", volume.up),
 
             -- Music player control
-            awful.key({} ,"XF86AudioPlay", function () io.popen(music_player_controls.play) end),
-            awful.key({} ,"XF86AudioStop", function () io.popen(music_player_controls.stop) end),
-            awful.key({} ,"XF86AudioPrev", function () io.popen(music_player_controls.previous_track) end),
-            awful.key({} ,"XF86AudioNext", function () io.popen(music_player_controls.next_track) end)
+            awful.key({} ,"XF86AudioPlay", player.toggle_play_pause),
+            awful.key({} ,"XF86AudioStop", player.stop),
+            awful.key({} ,"XF86AudioPrev", player.previous),
+            awful.key({} ,"XF86AudioNext", player.next)
         )
 
     elseif hostname == "lysa" then
