@@ -50,6 +50,7 @@ local function create_right_layout(screen)
         require_widget("cmus"), spacer,
         wibox.widget.systray(), spacer,
         require_widget("clock"), spacer,
+        awful.widget.keyboardlayout(),
 
         layoutbox,
     }
