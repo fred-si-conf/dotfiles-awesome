@@ -21,6 +21,7 @@ local dump = require("utils.dump_table")
 
 local charcodes_popup = require("plugins.charcodes")
 local multimedia = require("utils.multimedia")
+local screenshot = require("utils.screenshot")('~/Images/screenshots')
 local browser = require("browser")
 ------------------------------------------------------------------------------
 -- Error handling
@@ -165,24 +166,16 @@ awesomeManagingKeys = gears.table.join(
             group="awesome"
         }),
 
-    awful.key({                   }, "Print",
-        function () io.popen("scrot -e 'mv $f ~/Images/screenshots'") end,
-        {
-            description="Take screenshot of active window",
-            group="applications"
-        }),
-    awful.key({         "Shift"   }, "Print",
-        function () io.popen("scrot -u -e 'mv $f ~/Images/screenshots'") end,
-        {
-            description="Take screenshot of active window",
-            group="applications"
-        }),
-    awful.key({         "Control" }, "Print", nil,
-        function () awful.spawn("scrot -s -e 'mv $f ~/Images/screenshots'") end,
-        {
-            description="Take screenshot of interactive selection with the mouse",
-            group="applications"
-        }),
+    -- Screenshots
+    awful.key({         }, "Print", function() screenshot:screen() end,
+              {description="Take screenshot of active screen",
+               group="applications"}),
+    awful.key({"Shift"  }, "Print", function() screenshot:focused_window() end,
+              {description="Take screenshot of focused window",
+               group="applications"}),
+    awful.key({"Control"}, "Print", nil, function() screenshot:selection() end,
+              {description="Take screenshot of interactive mouse selection",
+               group="applications"}),
 
     awful.key({                   }, "XF86Calculator",
         function() awful.spawn(calculator, {floating = true}) end,
