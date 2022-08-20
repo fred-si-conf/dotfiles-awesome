@@ -154,7 +154,9 @@ awesomeManagingKeys = gears.table.join(
             group = "awesome",
         }),
 
-    awful.key({ modkey,"Mod1"}, "w", function () io.popen(i3lock_command) end),
+    awful.key({ modkey, "Mod1"}, "w", function () awful.spawn(i3lock_command) end),
+    awful.key({ modkey,       }, "w", function () end,
+                                      function () awful.spawn.with_shell('sleep 2; xset dpms force off') end),
     awful.key({ modkey, }, "o", function () charcodes_popup.show() end,
                                 function () charcodes_popup.hidde() end,
                                 {description="Affiche un popup ASCII",
