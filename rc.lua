@@ -20,6 +20,7 @@ local env = require("utils.env")
 local dump = require("utils.dump_table")
 
 local charcodes_popup = require("plugins.charcodes")
+local notification_center = require("plugins.notification_center")
 local multimedia = require("utils.multimedia")
 local screenshot = require("utils.screenshot")('~/Images/screenshots')
 local browser = require("browser")
@@ -167,6 +168,8 @@ awesomeManagingKeys = gears.table.join(
             description="show help",
             group="awesome"
         }),
+
+    awful.key({ modkey, "Shift" }, "n", notification_center),
 
     -- Screenshots
     awful.key({         }, "Print", function() screenshot:screen() end,

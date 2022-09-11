@@ -6,6 +6,7 @@ local presets = naughty.config.presets
 local Notification = {}
 function Notification:init(args)
     self.notification = notify(args)
+    return self.notification
 end
 
 function Notification:destroy()
