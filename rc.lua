@@ -60,6 +60,8 @@ config_directory = awful.util.getdir("config")
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(config_directory .. "theme/theme.lua")
 
+local start_tag = 8
+
 io.popen('pgrep urxvtd || urxvtd -o -f -q')
 terminal = "urxvtc"
 
@@ -132,7 +134,7 @@ awful.screen.connect_for_each_screen(
         -- Each screen has its own tag table.
         awful.tag({ "1", "2", "3", "4", "5", "6", "7"}, s, awful.layout.layouts[1])
         awful.tag.new({"8", "9"}, s, awful.layout.suit.max)
-        s.tags[8]:view_only() -- focus le tag 8 au démarrage
+        s.tags[start_tag]:view_only() -- focus le tag "start_tag" au démarrage
 
         status_bar(s)
     end
