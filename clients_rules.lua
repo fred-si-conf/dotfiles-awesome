@@ -52,7 +52,7 @@ return function (client_keys, client_buttons)
             properties = { screen = 1, tag = "1" },
             rule_any = {
                 class = {
-                    "Thunderbird",
+                    "thunderbird",
                     "discord",
                     "Signal",
                 }
