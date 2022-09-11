@@ -227,8 +227,9 @@ awesomeManagingKeys = gears.table.join(
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
     -- Prompt
-    awful.key({ modkey,           }, "h",     function () awful.screen.focused().mypromptbox:run() end,
-        {description = "run prompt", group = "launcher"}),
+    awful.key({ modkey,           }, "h",
+              function () awful.spawn('rofi -show combi') end,
+              {description = "run app launcher", group = "launcher"}),
 
     awful.key({ modkey,           }, "x", -- Open lua prompt
             function ()
