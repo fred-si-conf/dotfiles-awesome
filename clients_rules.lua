@@ -83,6 +83,7 @@ return function (client_keys, client_buttons)
             },
             rule_any = {
                 name = {
+                    "Welcome to PyCharm",
                     "Trust and Open Project.*",
                     "Cannot execute command",
                     "win0"

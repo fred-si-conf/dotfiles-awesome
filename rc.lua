@@ -474,6 +474,8 @@ client.connect_signal("manage", function (c, startup)
         if c.class == "com-jetbrains-toolbox-entry-ToolboxEntry" then
             c:connect_signal("unfocus", function(c) c:kill()  end)
         end
+
+        -- notify.critical(c.name, dump(c))
     end
 end)
 
