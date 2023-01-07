@@ -22,7 +22,7 @@ function player_control(command)
     awful.spawn("playerctl " .. command)
 end
 
-volume_step = "5%"
+volume_step = "2%"
 volume_commands = {
     base = "amixer set Master %s",
     mute = "toggle",
