@@ -1,4 +1,5 @@
 local notify = require("utils.notify")
+local awful = require("awful")
 
 function in_table(needle, haystack)
     for _, v in ipairs(haystack) do
@@ -24,10 +25,12 @@ end
 
 volume_step = "2%"
 volume_commands = {
-    base = "amixer set Master %s",
+    base = "pactl %s  %s %s",
+    set_volume = "set-sink-volume",
+    set_mute = "set-sink-mute",
     mute = "toggle",
-    up = volume_step .. "+",
-    down = volume_step .. "-",
+    up = "+" .. volume_step,
+    down = "-" .. volume_step,
 }
 
 function volume_control(command)
@@ -35,8 +38,17 @@ function volume_control(command)
         notify.critical("Volume control", "Unknown command '" .. command .. "'")
     end
 
-    cmd = string.format(volume_commands.base, volume_commands[command])
-    awful.spawn(cmd)
+    set_sink = command == "mute" and volume_commands.set_mute or volume_commands.set_volume
+
+    awful.spawn.with_line_callback(
+        "pactl get-default-sink",
+        {
+            stdout = function(std_out) 
+                cmd = string.format(volume_commands.base, set_sink, std_out, volume_commands[command])
+                awful.spawn(cmd)
+            end
+        }
+    )
 end
 
 return {

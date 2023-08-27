@@ -22,4 +22,5 @@ end
 return {
     critical = create_notifier(presets.critical),
     normal = create_notifier(presets.normal), 
+    info = create_notifier(presets.normal),
 }
