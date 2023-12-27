@@ -171,7 +171,7 @@ awesomeManagingKeys = gears.table.join(
         }),
 
     -- Screenshots
-    awful.key({         }, "Print", function() screenshot:screen() end,
+    awful.key({         }, "Print", function() awful.spawn("flameshot gui") end,
               {description="Take screenshot of active screen",
                group="applications"}),
     awful.key({"Shift"  }, "Print", function() screenshot:focused_window() end,
