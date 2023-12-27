@@ -6,7 +6,7 @@ DEFAULT_EXECUTABLE = 'firefox'
 browsers = {
     default = {
         profile = 'default',
-        autolaunch = true,
+        autolaunch = false,
         tag = '2'
     },
     clean = {
