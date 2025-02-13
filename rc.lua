@@ -341,33 +341,20 @@ applicationLaunchingKeys = gears.table.join(
     end
 
 -- Multimedia keys
-    if hostname == "burp" then
-        player = multimedia.player
-        volume = multimedia.volume
-        multimediaKeys = gears.table.join(
-            -- Sound control
-            awful.key({} ,"XF86AudioMute", volume.mute),
-            awful.key({} ,"XF86AudioLowerVolume", volume.down),
-            awful.key({} ,"XF86AudioRaiseVolume", volume.up),
+    player = multimedia.player
+    volume = multimedia.volume
+    multimediaKeys = gears.table.join(
+        -- Sound control
+        awful.key({} ,"XF86AudioMute", volume.mute),
+        awful.key({} ,"XF86AudioLowerVolume", volume.down),
+        awful.key({} ,"XF86AudioRaiseVolume", volume.up),
 
-            -- Music player control
-            awful.key({} ,"XF86AudioPlay", player.toggle_play_pause),
-            awful.key({} ,"XF86AudioStop", player.stop),
-            awful.key({} ,"XF86AudioPrev", player.previous),
-            awful.key({} ,"XF86AudioNext", player.next)
-        )
-
-    elseif hostname == "lysa" then
-        multimediaKeys = gears.table.join(
-            awful.key({} ,"XF86AudioMute", function () end),
-
-            awful.key({} ,"XF86AudioLowerVolume", function () end),
-            awful.key({} ,"XF86AudioRaiseVolume", function () end),
-
-            awful.key({modkey} ,"XF86AudioLowerVolume", function () end),
-            awful.key({modkey} ,"XF86AudioRaiseVolume", function () end)
-        )
-    end
+        -- Music player control
+        awful.key({} ,"XF86AudioPlay", player.toggle_play_pause),
+        awful.key({} ,"XF86AudioStop", player.stop),
+        awful.key({} ,"XF86AudioPrev", player.previous),
+        awful.key({} ,"XF86AudioNext", player.next)
+    )
 
 clientbuttons = gears.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
