@@ -428,5 +428,6 @@ awful.spawn.once(music_player, {tag = "9"})
 awful.spawn.once(autolock, {})
 awful.spawn.once('nextcloud', {})
 awful.spawn.once('copyq', {})
+awful.spawn.once('keepassxc', {})
 
 -- vim:foldmethod=indent: foldcolumn=4: expandtab
