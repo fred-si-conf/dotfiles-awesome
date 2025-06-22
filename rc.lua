@@ -62,8 +62,7 @@ beautiful.init(config_directory .. "theme/theme.lua")
 
 local start_tag = 8
 
-io.popen('pgrep urxvtd || urxvtd -o -f -q')
-terminal = "urxvtc"
+terminal = "tilix"
 
 editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
