@@ -69,15 +69,8 @@ editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
 calculator = "gnome-calculator"
 
-if hostname == "burp" then
-    file_manager = "nautilus"
-    alternative_file_manager = "nautilus"
-
-elseif hostname == "lysa" then
-    file_manager = "xfe"
-    alternative_file_manager = "nautilus"
-
-end
+file_manager = "nautilus"
+alternative_file_manager = "xfe"
 
 lock_image = os.getenv("HOME") .. "/Images/wallpapers/lock.png"
 lock_color = "605050"
@@ -89,11 +82,9 @@ autolock = "xautolock -time 30 -locker '" .. i3lock_command .. "' -secure"
 mail_client = "thunderbird"
 irc_client = terminal .. " -e tmux new-session -AD -s irc weechat"
 
-if hostname == "burp" then
-    suspend = i3lock_command .. ' && systemctl suspend -i'
-    music_player = terminal .. " -e tmux new-session -AD -s cmus cmus"
-    torrent_client = "qbittorrent"
-end
+suspend = i3lock_command .. ' && systemctl suspend -i'
+music_player = terminal .. " -e tmux new-session -AD -s cmus cmus"
+torrent_client = "qbittorrent"
 
 
 -- Menubar configuration
@@ -284,61 +275,9 @@ applicationLaunchingKeys = gears.table.join(
 )
 
 -- Host specific keybinding
-    if hostname == "burp" then
-        hostSpecificKeys = gears.table.join(
-            awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end)
-        )
-
-    elseif hostname == "lysa" then
-        local function brightness(target)
-            if target == 'max' then
-                io.popen("xbacklight -set 100")
-            elseif target == 'off' then
-                io.popen("xbacklight -set 0")
-            elseif target == 'up' then
-                io.popen("xbacklight -inc 10")
-            elseif target == 'down' then
-                io.popen("xbacklight -dec 10")
-            end
-        end
-
-        local touchpad = {}
-            function touchpad.get_state()
-                local touchpad = io.popen("synclient -l | grep 'TouchpadOff'")
-                local touchpad_state = string.match(touchpad:read("*l"), '(%d)')
-
-                return touchpad_state
-            end
-
-            function touchpad.switch_off()
-                io.popen("synclient TouchpadOff=1")
-                mouse.coords({x=0, y=0})
-            end
-
-            function touchpad.switch_on()
-                io.popen("synclient TouchpadOff=0")
-            end
-
-            function touchpad.toggle_state()
-                if touchpad.get_state() == "0" then
-                    touchpad.switch_off()
-                else
-                    touchpad.switch_on()
-                end
-            end
-
-        hostSpecificKeys = gears.table.join(
-            awful.key({} ,"XF86TouchpadToggle", function () touchpad.toggle_state() end),
-
-            awful.key({} ,"XF86MonBrightnessDown", function () brightness('down') end),
-            awful.key({} ,"XF86MonBrightnessUp", function () brightness('up') end),
-
-            awful.key({modkey} ,"XF86MonBrightnessDown", function () brightness('off') end),
-            awful.key({modkey} ,"XF86MonBrightnessUp", function () brightness('max') end)
-        )
-
-        touchpad.switch_off()
-    end
+    hostSpecificKeys = gears.table.join(
+        awful.key({ modkey,"Mod1"}, "w", function () io.popen(suspend) end)
+    )
 
 -- Multimedia keys
     player = multimedia.player
